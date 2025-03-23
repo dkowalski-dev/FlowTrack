@@ -9,9 +9,14 @@
             <i class="bi bi-list"></i>
           </a>
         </li>
+        <li class="nav-item d-none d-md-block"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Oferty</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Ustawienia</a></li>
+        {% else %}
+        <li class="nav-item d-none d-md-block"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Logowanie</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Rejestracja</a></li>
         {% endif %}
-        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
-        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
       </ul>
       <!--end::Start Navbar Links-->
       <!--begin::End Navbar Links-->
@@ -34,7 +39,6 @@
               <!--begin::Message-->
               <div class="d-flex">
                 <div class="flex-shrink-0">
-                  <img
                     src="../../dist/assets/img/user1-128x128.jpg"
                     alt="User Avatar"
                     class="img-size-50 rounded-circle me-3"
