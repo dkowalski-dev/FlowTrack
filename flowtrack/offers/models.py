@@ -1,3 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import User
+import uuid
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
-# Create your models here.
+class Status(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+
+class Offer(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    client_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, blank=True, null=True)
+    client_id = models.UUIDField(blank=True, null=True)
+    client = GenericForeignKey('client_type', 'client_id')
+    status = models.ForeignKey(Status, on_delete=models.SET_NULL, blank=True, null=True)
+    #products = many to many
