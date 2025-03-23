@@ -71,7 +71,7 @@
       {% include 'top_navbar.html' %}
       <!--end::Header-->
       <!--begin::Sidebar-->
-      {% if user_is_authenticate %}
+      {% if user.is_authenticated %}
       {% include 'side_navbar.html' %}
       {% endif %}
       <!--end::Sidebar-->
