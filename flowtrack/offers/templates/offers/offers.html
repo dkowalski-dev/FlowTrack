@@ -1,0 +1,55 @@
+{% extends "main.html" %}
+{% block title %}Oferty{% endblock title %}
+{% block main %}
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-12">
+          <!-- /.card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h3 class="card-title">Aktualne oferty</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Klient</th>
+                    <th>Miasto</th>
+                    <th>Region</th>
+                    <th>Email</th>
+                    <th>Telefon</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for offer in offers %}
+                  <tr class="align-middle">
+                    <td>{{ offer.created }}</td>
+                    <td>{{ offer.client }}</td>
+                    <td>{{ offer.client.address}}</td>
+                    <td>{{ offer.client.region }}</td>
+                    <td>{{ offer.client.email}}</td>
+                    <td>{{ offer.client.phone}}</td>
+                    <td>{{ offer.status }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::App Content-->
+{% endblock main %}

@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import IndividualClient, CompanyClient
 
-# Register your models here.
+admin.site.register(IndividualClient)
+admin.site.register(CompanyClient)

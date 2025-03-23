@@ -1,3 +1,6 @@
 from django.shortcuts import render
-
-# Create your views here.
+from .models import Offer
+def offers(request):
+    offers = Offer.objects.filter(owner=request.user)
+    context = {"offers": offers}
+    return render(request, "offers/offers.html", context)

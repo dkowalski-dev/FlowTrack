@@ -14,7 +14,13 @@ class Client(models.Model):
 class IndividualClient(Client):
     name = models.CharField(max_length=30, blank=True, null=True)
     last_name = models.CharField(max_length=30, blank=True, null=True)
+
+    def __str__(self):
+        return self.name + ' ' + self.last_name
     
 class CompanyClient(Client):
     company_name = models.CharField(max_length=255, blank=True, null=True)
     nip = models.CharField(max_length=20, null=True, blank=True)
+
+    def __str__(self):
+        return self.company_name
