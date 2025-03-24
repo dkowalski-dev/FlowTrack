@@ -30,7 +30,7 @@
         >
           <li class="nav-header">OFERTY</li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'offers' %}" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Oferty w toku</p>
             </a>
@@ -64,11 +64,101 @@
               </li>
             </ul>
           </li>
-          <li class="nav-header">DOCUMENTATIONS</li>
+          <li class="nav-item">
+            <a href="{% url 'offers' %}" class="nav-link">
+              <i class="nav-icon bi bi-download"></i>
+              <p>Stwórz ofertę</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'offers' %}" class="nav-link">
+              <i class="nav-icon bi bi-download"></i>
+              <p>Edytuj statusy</p>
+            </a>
+          </li>
+          <li class="nav-header">Klienci</li>
           <li class="nav-item">
             <a href="#" class="nav-link">
+              <i class="nav-icon bi bi-box-arrow-in-right"></i>
+              <p>
+                Lista klientów
+                <i class="nav-arrow bi bi-chevron-right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'clients' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Wszyscy</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Firmy</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Prywatni</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon bi bi-box-arrow-in-right"></i>
+              <p>
+                Dodaj klienta
+                <i class="nav-arrow bi bi-chevron-right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'clients' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Firma</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Prywanty</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-header">Produkty</li>
+          <li class="nav-item">
+            <a href="{% url 'offers' %}" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
-              <p>Installation</p>
+              <p>Przeglądaj produkty</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'offers' %}" class="nav-link">
+              <i class="nav-icon bi bi-download"></i>
+              <p>Dodaj produkty</p>
+            </a>
+          </li>
+          <li class="nav-header">Lista zadań</li>
+          <li class="nav-item">
+            <a href="{% url 'offers' %}" class="nav-link">
+              <i class="nav-icon bi bi-download"></i>
+              <p>Kalendarz</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'offers' %}" class="nav-link">
+              <i class="nav-icon bi bi-download"></i>
+              <p>Zaplanuj zadania</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'offers' %}" class="nav-link">
+              <i class="nav-icon bi bi-download"></i>
+              <p>Zaplanuj spotkanie</p>
             </a>
           </li>
         </ul>

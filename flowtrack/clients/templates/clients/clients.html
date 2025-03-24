@@ -1,0 +1,102 @@
+{% extends "main.html" %}
+{% block title %}Lista klientów{% endblock title %}
+{% block main %}
+<div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-12">
+          <!-- /.card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h3 class="card-title">Firmy</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Nazwa firmy</th>
+                    <th>NIP</th>
+                    <th>Email</th>
+                    <th>Numer telefonu</th>
+                    <th>Adres</th>
+                    <th>Region</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for client in company_client_list %}
+                  <tr class="align-middle">
+                    <td>{{ client.company_name }}</td>
+                    <td>{{ client.nip }}</td>
+                    <td>{{ client.email }}</td>
+                    <td>{{ client.phone }}</td>
+                    <td>{{ client.address }}</td>
+                    <td>{{ client.region }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::App Content-->
+  <div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-12">
+          <!-- /.card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h3 class="card-title">Klienci prywatni</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Imie</th>
+                    <th>Nazwisko</th>
+                    <th>Email</th>
+                    <th>Numer telefonu</th>
+                    <th>Adres</th>
+                    <th>Region</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for client in individual_client_list %}
+                  <tr class="align-middle">
+                    <td>{{ client.name }}</td>
+                    <td>{{ client.last_name }}</td>
+                    <td>{{ client.email }}</td>
+                    <td>{{ client.phone }}</td>
+                    <td>{{ client.address }}</td>
+                    <td>{{ client.region }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::App Content-->
+{% endblock main %}

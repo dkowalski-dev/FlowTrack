@@ -9,11 +9,10 @@
             <i class="bi bi-list"></i>
           </a>
         </li>
-        <li class="nav-item d-none d-md-block"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
-        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Oferty</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Strona główna</a></li>
         <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Ustawienia</a></li>
         {% else %}
-        <li class="nav-item d-none d-md-block"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+        <li class="nav-item d-none d-md-block"><a href="{% url 'index' %}" class="nav-link">Strona główna</a></li>
         <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Logowanie</a></li>
         <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Rejestracja</a></li>
         {% endif %}
