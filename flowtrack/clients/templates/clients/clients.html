@@ -2,6 +2,7 @@
 {% block title %}Lista klientów{% endblock title %}
 {% block main %}
 <div class="app-content">
+    {% if company_client_list %}
     <!--begin::Container-->
     <div class="container-fluid">
       <!--begin::Row-->
@@ -38,6 +39,7 @@
                   {% endfor %}
                 </tbody>
               </table>
+              
             </div>
             <!-- /.card-body -->
           </div>
@@ -48,9 +50,9 @@
       <!--end::Row-->
     </div>
     <!--end::Container-->
-  </div>
+  {% endif %}
+  {% if individual_client_list %}
   <!--end::App Content-->
-  <div class="app-content">
     <!--begin::Container-->
     <div class="container-fluid">
       <!--begin::Row-->
@@ -96,6 +98,7 @@
       </div>
       <!--end::Row-->
     </div>
+    {% endif %}
     <!--end::Container-->
   </div>
   <!--end::App Content-->

@@ -65,7 +65,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="{% url 'offers' %}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Stwórz ofertę</p>
             </a>
@@ -87,19 +87,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'clients' %}" class="nav-link">
+                <a href="{% url 'clients' 'all' %}" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Wszyscy</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'clients' 'com' %}" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Firmy</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'clients' 'ind' %}" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Prywatni</p>
                 </a>
@@ -116,13 +116,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'clients' %}" class="nav-link">
+                <a href="{% url 'create_client' 'com' %}" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Firma</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'create_client' 'ind' %}" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Prywanty</p>
                 </a>
@@ -131,32 +131,32 @@
           </li>
           <li class="nav-header">Produkty</li>
           <li class="nav-item">
-            <a href="{% url 'offers' %}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Przeglądaj produkty</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'offers' %}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Dodaj produkty</p>
             </a>
           </li>
           <li class="nav-header">Lista zadań</li>
           <li class="nav-item">
-            <a href="{% url 'offers' %}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Kalendarz</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'offers' %}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Zaplanuj zadania</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{% url 'offers' %}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Zaplanuj spotkanie</p>
             </a>
