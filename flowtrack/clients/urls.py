@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('browse/<str:pk>/', views.clients, name="clients"),
-    path('new-client/<str:pk>', views.create_client, name="create_client"),
+    path('browse/<str:client_type>/', views.clients, name="clients"),
+    path('update-client/<str:pk>/<str:client_type>', views.update_client, name="update-client"),
+    path('new-client/<str:client_type>', views.create_client, name="create-client"),
 ]

@@ -35,6 +35,8 @@
                     <td>{{ client.phone }}</td>
                     <td>{{ client.address }}</td>
                     <td>{{ client.region }}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('companyclient', '{{ client.id }}')"> Usuń</button></td>
+                    <td><a class="btn btn-primary btn-sm" href="{% url 'update-client' client.id 'com' %}">Edytuj</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -85,6 +87,8 @@
                     <td>{{ client.phone }}</td>
                     <td>{{ client.address }}</td>
                     <td>{{ client.region }}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('individualclient', '{{ client.id }}')"> Usuń</button></td>
+                    <td><a class="btn btn-primary btn-sm" href={% url 'update-client' client.id 'ind' %}>Edytuj</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -101,5 +105,14 @@
     {% endif %}
     <!--end::Container-->
   </div>
+  <script>
+    function confirmDelete(modelName, objectId) {
+        let confirmAction = confirm("Czy na pewno chcesz usunąć ten obiekt?");
+        if (confirmAction) {
+            let lastPage = window.location.href;  // Pobiera aktualny adres URL
+            window.location.href = `/delete/${modelName}/${objectId}/?lastpage=${encodeURIComponent(lastPage)}`;
+        }
+    }
+</script>
   <!--end::App Content-->
 {% endblock main %}

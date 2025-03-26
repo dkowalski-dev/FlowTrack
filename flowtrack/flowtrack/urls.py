@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('usersapp.urls')),
     path('offers/', include('offers.urls')),
     path('clients/', include('clients.urls')),
+    path('delete/<str:model_name>/<uuid:object_id>/', views.delete_object, name='delete-object'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
