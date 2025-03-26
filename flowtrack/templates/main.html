@@ -151,6 +151,13 @@
       // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
       // IT'S ALL JUST JUNK FOR DEMO
       // ++++++++++++++++++++++++++++++++++++++++++
+        function confirmDelete(modelName, objectId) {
+            let confirmAction = confirm("Czy na pewno chcesz usunąć ten obiekt?");
+            if (confirmAction) {
+                let lastPage = window.location.href;  // Pobiera aktualny adres URL
+                window.location.href = `/delete/${modelName}/${objectId}/?lastpage=${encodeURIComponent(lastPage)}`;
+            }
+        }
 
       const visitors_chart_options = {
         series: [

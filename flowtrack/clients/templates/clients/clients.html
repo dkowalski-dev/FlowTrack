@@ -105,14 +105,5 @@
     {% endif %}
     <!--end::Container-->
   </div>
-  <script>
-    function confirmDelete(modelName, objectId) {
-        let confirmAction = confirm("Czy na pewno chcesz usunąć ten obiekt?");
-        if (confirmAction) {
-            let lastPage = window.location.href;  // Pobiera aktualny adres URL
-            window.location.href = `/delete/${modelName}/${objectId}/?lastpage=${encodeURIComponent(lastPage)}`;
-        }
-    }
-</script>
   <!--end::App Content-->
 {% endblock main %}

@@ -1,0 +1,65 @@
+{% extends "main.html" %}
+{% block title %}Statusy{% endblock title %}
+{% block main %}
+<div class="app-content">
+    <div class="app-content-header">
+      <!--begin::Container-->
+      <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+          <div class="col-sm-6"><h3 class="mb-0">Edytuj statusy</h3></div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-end">
+              <li class="breadcrumb-item"><a href="{% url 'create-status' %}">Dodaj status</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Simple Tables</li>
+            </ol>
+          </div>
+        </div>
+        <!--end::Row-->
+      </div>
+      <!--end::Container-->
+    </div>
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-12">
+          <!-- /.card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h3 class="card-title">Twoje statusy</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Nazwa</th>
+                    <th>Rodzaj</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for status in statuses %}
+                  <tr class="align-middle">
+                    <td>{{ status.name }}</td>
+                    <td>{{ status.get_type_display  }}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('status', '{{ status.id }}')"> Usuń</button>
+                    <a class="btn btn-primary btn-sm" href="{% url 'update-status' status.id %}">Edytuj</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::App Content-->
+{% endblock main %}
