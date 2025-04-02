@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from products.models import Product
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -26,4 +27,4 @@ class Offer(models.Model):
     client_id = models.UUIDField(blank=True, null=True)
     client = GenericForeignKey('client_type', 'client_id')
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, blank=True, null=True)
-    #products = many to many
+    products = models.ManyToManyField(Product, blank=True)
