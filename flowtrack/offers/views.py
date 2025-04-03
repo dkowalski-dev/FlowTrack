@@ -15,12 +15,16 @@ def create_offer(request):
         if form.is_valid():
             form.save()
             return redirect('offers')
-        
+
     context = {"form": form}
     return render(request, "offers/status_form.html", context)
 
 def offer(request, pk):
-    return render(request, "offers/offer.html")
+    offer = Offer.objects.filter(owner=request.user, id=pk).first()
+    if not offer:
+        return redirect('offers')
+    print(type(offer.client_type))
+    return render(request, "offers/offer.html", {"offer": offer})
 
 def statuses(request):
     statuses = Status.objects.filter(owner=request.user)
