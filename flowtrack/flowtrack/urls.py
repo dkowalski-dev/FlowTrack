@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('usersapp.urls')),
     path('offers/', include('offers.urls')),
     path('clients/', include('clients.urls')),
+    path('products/', include('products.urls')),
     path('delete/<str:model_name>/<uuid:object_id>/', views.delete_object, name='delete-object'),
 ]
 
