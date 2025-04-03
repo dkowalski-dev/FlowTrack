@@ -1,17 +1,12 @@
 {% extends "main.html" %}
-{% block title %}Statusy{% endblock title %}
+{% block title %}FlowTrack{% endblock title %}
 {% block main %}
-<div class="d-flex justify-content-center">  <!-- Dodane klasy do wyśrodkowania -->
+<div class="d-flex justify-content-center">
   <div class="col-md-6">
-      <!--begin::Quick Example-->
       <div class="card card-primary card-outline mb-4">
-          <!--begin::Header-->
-          <div class="card-header"><div class="card-title">Quick Example</div></div>
-          <!--end::Header-->
-          <!--begin::Form-->
+          <div class="card-header"><div class="card-title">{{title}}</div></div>
           <form method="POST">
               {% csrf_token %}
-              <!--begin::Body-->
               <div class="card-body">
                   {% for field in form %}
                   <div class="mb-3">
@@ -22,12 +17,10 @@
                   {% endfor %}
               </div>
               <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary">Zatwierdź</button>
               </div>
-              <!--end::Footer-->
           </form>
-          <!--end::Form-->
       </div>
-  </div> <!-- col-md-6 -->
-</div> <!-- d-flex justify-content-center -->
+  </div>
+</div>
 {% endblock main %}

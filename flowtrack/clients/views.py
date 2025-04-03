@@ -18,9 +18,7 @@ def create_client(request, client_type):
         form = CompanyClientForm()
     else:
         return redirect("clients", client_type="all")
-    context = {
-        "form": form
-    }
+    
     if request.method == "POST":
         if client_type == "ind":
             form = IndividualClientForm(request.POST)
@@ -33,7 +31,12 @@ def create_client(request, client_type):
             client.owner = request.user
             client.save()
             return redirect("clients", client_type="all")
-    return render(request, "clients/client_form.html", context)
+    
+    context = {
+        "form": form,
+        "title": "Dodaj klienta"
+    }
+    return render(request, "form_template.html", context)
 
 def update_client(request, pk, client_type):
     if client_type == "ind":
@@ -53,5 +56,8 @@ def update_client(request, pk, client_type):
             if form.is_valid():
                 form.save()
                 return redirect("clients", client_type="all")
-    context = { "form": form }
-    return render(request, "clients/client_form.html", context)
+    context = { 
+        "form": form,
+         "title": "Edytuj dane" 
+         }
+    return render(request, "form_template.html", context)

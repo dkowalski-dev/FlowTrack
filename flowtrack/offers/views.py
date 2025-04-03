@@ -16,8 +16,11 @@ def create_offer(request):
             form.save()
             return redirect('offers')
 
-    context = {"form": form}
-    return render(request, "offers/status_form.html", context)
+    context = {
+        "form": form,
+        "title": "Stwórz ofertę",
+        }
+    return render(request, "form_template.html", context)
 
 def offer(request, pk):
     form = NoteForm()
@@ -56,8 +59,11 @@ def create_status(request):
             status.save()
             return redirect('offers')
         
-    context = {"form": form}
-    return render(request, "offers/status_form.html", context)
+    context = {
+        "form": form,
+        "title": "Dodaj status"
+       }
+    return render(request, "form_template.html", context)
 
 def update_status(request, pk):
     status = Status.objects.get(id=pk)
@@ -68,6 +74,7 @@ def update_status(request, pk):
             form.save()
             return redirect('statuses')
     context = {
-        "form": form
+        "form": form,
+        "title": "Edytuj status",
     }
-    return render(request, "offers/status_form.html", context)
+    return render(request, "form_template.html", context)
