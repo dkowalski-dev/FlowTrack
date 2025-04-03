@@ -28,6 +28,16 @@ class Offer(models.Model):
     client = GenericForeignKey('client_type', 'client_id')
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, blank=True, null=True)
     products = models.ManyToManyField(Product, blank=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-created']
+
+class Note(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
 
     class Meta:
         ordering = ['-created']

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Offer, Status
-from .forms import StatusForm, OfferForm
+from .models import Offer, Status, Note
+from .forms import StatusForm, OfferForm, NoteForm
 
 def offers(request):
     offers = Offer.objects.filter(owner=request.user)
@@ -20,11 +20,23 @@ def create_offer(request):
     return render(request, "offers/status_form.html", context)
 
 def offer(request, pk):
+    form = NoteForm()
     offer = Offer.objects.filter(owner=request.user, id=pk).first()
+    notes = Note.objects.filter(offer=offer.id)
     if not offer:
         return redirect('offers')
-    print(type(offer.client_type))
-    return render(request, "offers/offer.html", {"offer": offer})
+    if request.method == "POST":
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.offer = offer
+            note.save()
+    context = {
+        "offer": offer,
+        "form": form,
+        "notes": notes,
+    }
+    return render(request, "offers/offer.html", context)
 
 def statuses(request):
     statuses = Status.objects.filter(owner=request.user)

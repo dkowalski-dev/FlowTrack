@@ -1,6 +1,6 @@
 from django.forms import ModelForm, ChoiceField
 from django.contrib.contenttypes.models import ContentType
-from .models import Status, Offer
+from .models import Status, Offer, Note
 from clients.models import IndividualClient, CompanyClient
 
 class StatusForm(ModelForm):
@@ -20,7 +20,10 @@ class StatusForm(ModelForm):
 class OfferForm(ModelForm):
     class Meta:
         model = Offer
-        fields = ['status']
+        fields = ['status', 'description']
+        labels = {
+            'description': "Główny opis oferty"
+        }
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -63,4 +66,13 @@ class OfferForm(ModelForm):
             offer.save()
         return offer
 
-       
+class NoteForm(ModelForm):
+    class Meta:
+        model = Note
+        fields = ['content']
+    
+    def __init__(self, *arg, **kwargs):
+        super().__init__(*arg, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({"class": "form-control"})
