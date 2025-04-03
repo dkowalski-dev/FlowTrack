@@ -28,3 +28,6 @@ class Offer(models.Model):
     client = GenericForeignKey('client_type', 'client_id')
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, blank=True, null=True)
     products = models.ManyToManyField(Product, blank=True)
+
+    class Meta:
+        ordering = ['-created']

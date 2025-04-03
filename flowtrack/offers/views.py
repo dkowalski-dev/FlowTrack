@@ -19,6 +19,9 @@ def create_offer(request):
     context = {"form": form}
     return render(request, "offers/status_form.html", context)
 
+def offer(request, pk):
+    return render(request, "offers/offer.html")
+
 def statuses(request):
     statuses = Status.objects.filter(owner=request.user)
     context = {

@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                 {% for offer in offers %}
-                <tr class="align-middle" onclick="window.location='{% url 'offer' offer.id %}';" style="cursor: pointer;">
+                  <tr class="align-middle">
                     <td>{{ offer.created }}</td>
                     <td>{{ offer.client }}</td>
                     <td>{{ offer.client.address}}</td>

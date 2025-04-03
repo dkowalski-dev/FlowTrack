@@ -45,6 +45,22 @@ class OfferForm(ModelForm):
         if self.user:
             offer.owner = self.user
 
-        client_id = self.cleaned_data.get['client']
+        client_id = self.cleaned_data.get('client')
 
-        #DO DOKOŃCZENIA JAK SIĘ ZACHCE!
+        if client_id:
+            client = IndividualClient.objects.filter(id=client_id).first()
+            if client:
+                offer.client_type = ContentType.objects.get_for_model(IndividualClient)
+            else:
+                client = CompanyClient.objects.filter(id=client_id).first()
+                if client:
+                    offer.client_type = ContentType.objects.get_for_model(CompanyClient)
+                else:
+                    offer.client_type = None
+        offer.client_id = client.id if client else None
+        #offer.status = self.cleaned_data.get('status')
+        if commit:
+            offer.save()
+        return offer
+
+       
