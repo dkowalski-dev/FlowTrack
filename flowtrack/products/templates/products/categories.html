@@ -1,0 +1,63 @@
+{% extends "main.html" %}
+
+{% block title %}Oferta{% endblock title %}
+
+{% block main %}
+<div class="app-content">
+  <div class="row">
+    <!-- Pierwsza kolumna -->
+    <div class="col-md-6">
+      {% if categories %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title"><strong>Twoje kategorie</strong></h3>
+        </div>
+        <!-- /.card-header -->
+         
+        <div class="card-body p-0">
+          <table class="table table-sm">
+            <tbody>
+            {% for category in categories %}
+              <tr class="align-middle">
+                <td>{{ category.name }}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('category', '{{ category.id }}')"> Usuń</button></td>
+                <td><a class="btn btn-primary btn-sm" href="#">Edytuj</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      {% endif %}
+    </div>
+    
+    <!-- Druga kolumna -->
+    <div class="col-md-6">
+      <div class="card card-primary card-outline mb-4">
+        <!--begin::Header-->
+        <div class="card-header"><div class="card-title">Dodaj kategorie</div></div>
+        <!--end::Header-->
+        <!--begin::Form-->
+        <form method="POST">
+            {% csrf_token %}
+            <!--begin::Body-->
+            <div class="card-body">
+                {% for field in form %}
+                <div class="mb-3">
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            </div>
+            <!--end::Footer-->
+        </form>
+        <!--end::Form-->
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock main %}

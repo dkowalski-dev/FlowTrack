@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Product
-from .forms import ProductForm
+from .models import Product, Category
+from .forms import ProductForm, CategoryForm
 
 def products(request):
     products = Product.objects.filter(owner=request.user)
@@ -33,3 +33,22 @@ def update_product(request, pk):
         "title": "Edytuj produkt",
     }
     return render(request, "form_template.html", context)
+
+def categories(request):
+    form = CategoryForm()
+    categories = Category.objects.filter(owner=request.user)
+
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.owner = request.user
+            category.save()
+            return redirect('categories')
+        
+    context = {
+        "form": form,
+        "categories": categories,
+    }
+    return render(request, "products/categories.html", context)
+    
