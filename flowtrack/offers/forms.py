@@ -61,7 +61,6 @@ class OfferForm(ModelForm):
                 else:
                     offer.client_type = None
         offer.client_id = client.id if client else None
-        #offer.status = self.cleaned_data.get('status')
         if commit:
             offer.save()
         return offer

@@ -34,6 +34,7 @@ def offer(request, pk):
             note = form.save(commit=False)
             note.offer = offer
             note.save()
+            return redirect('offer', offer.id)
     context = {
         "offer": offer,
         "form": form,

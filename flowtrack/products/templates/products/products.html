@@ -1,0 +1,72 @@
+{% extends "main.html" %}
+{% block title %}Lista produktów{% endblock title %}
+{% block main %}
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-sm-6"><h3 class="mb-0">Simple Tables</h3></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Simple Tables</li>
+          </ol>
+        </div>
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::App Content Header-->
+  <!--begin::App Content-->
+  <div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h3 class="card-title">Lista produktów</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Numer/Kod produktu</th>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Kategoria</th>
+                    <th>Cena zakupu</th>
+                    <th>Cena sprzedaży</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr class="align-middle">
+                            <td>{{product.serial_number}}</td>
+                            <td>{{product.name}}</td>
+                            <td>{{product.description}}</td>
+                            <td>{{product.category}}</td>
+                            <td>{{product.purchase_price}}</td>
+                            <td>{{product.sale_price}}</td>
+                            <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('product', '{{ product.id }}')"> Usuń</button>
+                            <a class="btn btn-primary btn-sm" href="{% url 'update-product' product.id %}">Edytuj</a></td>
+                        </tr>
+                    {% endfor%}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+{% endblock main %}

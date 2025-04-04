@@ -4,8 +4,8 @@ from . import views
 urlpatterns = [
     path('products/', views.products, name="products"),
     path('create-product', views.create_product, name="create-product"),
-    path('update-product', views.create_product, name="update-product"),
-    path('categories/', views.categories, name="categories"),
-    path('create-category', views.create_category, name="create-category"),
-    path('update-category', views.create_category, name="update-category"),
+    path('update-product/<uuid:pk>', views.update_product, name="update-product"),
+    #path('categories/', views.categories, name="categories"),
+    #path('create-category', views.create_category, name="create-category"),
+    #path('update-category', views.create_category, name="update-category"),
 ]
