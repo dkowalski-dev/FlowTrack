@@ -152,12 +152,20 @@
       // IT'S ALL JUST JUNK FOR DEMO
       // ++++++++++++++++++++++++++++++++++++++++++
         function confirmDelete(modelName, objectId) {
-            let confirmAction = confirm("Czy na pewno chcesz usunąć ten obiekt?");
+            let confirmAction = confirm(`Czy na pewno chcesz usunąć ${modelName}?`);
             if (confirmAction) {
                 let lastPage = window.location.href;  // Pobiera aktualny adres URL
                 window.location.href = `/delete/${modelName}/${objectId}/?lastpage=${encodeURIComponent(lastPage)}`;
             }
         }
+
+        function confirmDeleteProductFromOffer(offerId, productId) {
+          let confirmAction = confirm("Czy na pewno chcesz usunąć produkt z oferty?");
+          if (confirmAction) {
+                window.location.href = `/offers/offer-delete-product/${offerId}/${productId}`;
+            }
+        }
+
 
       const visitors_chart_options = {
         series: [

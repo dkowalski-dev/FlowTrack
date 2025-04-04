@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Offer, Status, Note
-from .forms import StatusForm, OfferForm, NoteForm
+from products.models import Product
+from .forms import StatusForm, OfferForm, NoteForm, OfferProductsForm
 
 def offers(request):
     offers = Offer.objects.filter(owner=request.user)
@@ -25,7 +26,9 @@ def create_offer(request):
 def offer(request, pk):
     form = NoteForm()
     offer = Offer.objects.filter(owner=request.user, id=pk).first()
+    products = offer.products.all()
     notes = Note.objects.filter(offer=offer.id)
+
     if not offer:
         return redirect('offers')
     if request.method == "POST":
@@ -39,8 +42,37 @@ def offer(request, pk):
         "offer": offer,
         "form": form,
         "notes": notes,
+        "products": products
     }
     return render(request, "offers/offer.html", context)
+
+def add_product_to_offer(request, pk):
+    offer = Offer.objects.get(id=pk)
+    form = OfferProductsForm(user=request.user, offer=offer)
+    context = {
+        "form": form,
+        "title": "Zaznacz produkty które chcesz dodać",
+    }
+    
+    if request.method == "POST":
+        form = OfferProductsForm(request.POST, user=request.user, offer=offer)
+        if form.is_valid():
+            products = form.cleaned_data['products']
+            for product in products:
+                offer.products.add(product)
+            return redirect('offer', pk)
+    return render(request,"form_template.html", context)
+
+def delete_product_from_offer(request, pk, pi):
+    print("Przekierowuje")
+    offer = Offer.objects.filter(id=pk).first()
+    if offer == None: return redirect('offers')
+
+    product = Product.objects.filter(id=pi).first()
+    if product == None: return redirect('offer', pk)
+
+    offer.products.remove(product)
+    return redirect('offer', offer.id)
 
 def statuses(request):
     statuses = Status.objects.filter(owner=request.user)
