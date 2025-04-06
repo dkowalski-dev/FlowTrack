@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from .models import IndividualClient, CompanyClient
-from .utils import formatted_phone
+from .utils import formatted_phone, formatted_nip
 
 class IndividualClientForm(ModelForm):
     class Meta:
@@ -29,10 +29,11 @@ class IndividualClientForm(ModelForm):
 class CompanyClientForm(ModelForm):
     class Meta:
         model = CompanyClient
-        fields = ['company_name', 'nip', 'email', 'phone', 'address', 'region' ]
+        fields = ['nip', 'company_name', 'contact_person', 'email', 'phone', 'address', 'region' ]
         labels = {
             'company_name': 'Nazwa firmy', 
             'nip': "NIP", 
+            'contact_person': "Osoba do kontaktu",
             'email': "Email", 
             'phone': "Telefon", 
             'address': "Adres", 
@@ -48,3 +49,7 @@ class CompanyClientForm(ModelForm):
     def clean_phone(self):
         phone = self.cleaned_data['phone']
         return formatted_phone(phone)
+    
+    def clean_nip(self):
+        nip = self.cleaned_data['nip']
+        return formatted_nip(nip)
