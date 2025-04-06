@@ -34,7 +34,7 @@
                     <td>{{ client.email }}</td>
                     <td>{{ client.phone }}</td>
                     <td>{{ client.address }}</td>
-                    <td>{{ client.region }}</td>
+                    <td>{% if client.region == 'brak' %} - {% else %}{{ client.get_region_display }} {% endif %}</td>
                     <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('companyclient', '{{ client.id }}')"> Usuń</button></td>
                     <td><a class="btn btn-primary btn-sm" href="{% url 'update-client' client.id 'com' %}">Edytuj</a></td>
                   </tr>
@@ -86,7 +86,7 @@
                     <td>{{ client.email }}</td>
                     <td>{{ client.phone }}</td>
                     <td>{{ client.address }}</td>
-                    <td>{{ client.region }}</td>
+                    <td>{% if client.region == 'brak' %} - {% else %}{{ client.get_region_display }} {% endif %}</td>
                     <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('individualclient', '{{ client.id }}')"> Usuń</button></td>
                     <td><a class="btn btn-primary btn-sm" href={% url 'update-client' client.id 'ind' %}>Edytuj</a></td>
                   </tr>
