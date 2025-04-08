@@ -47,7 +47,7 @@ def update_client(request, pk, client_type):
         form = CompanyClientForm(instance=client)
     if request.method == "POST":
         if client_type == "ind":
-            form = IndividualClientForm(request.POST, isinstance=client)
+            form = IndividualClientForm(request.POST, instance=client)
             if form.is_valid():
                 form.save()
                 return redirect("clients", client_type="all")

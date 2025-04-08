@@ -27,5 +27,7 @@ def formatted_nip(nip):
                 return nip
             else:
                 raise ValidationError("Numer nip powinien mieć 10 cyfr")
+        else:
+            raise ValidationError("Nip może składać się wyłącznie z cyfr")
     else:
         return ""
