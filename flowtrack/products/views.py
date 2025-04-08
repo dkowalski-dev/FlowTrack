@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from .models import Product, Category
 from .forms import ProductForm, CategoryForm
+from django.contrib import messages
 
 def products(request):
     products = Product.objects.filter(owner=request.user)
     return render(request,"products/products.html", {"products": products})
 
 def create_product(request):
+    if Category.objects.filter(owner=request.user).first () == None:
+        messages.warning(request, "Aby dodać produkty musisz posiadać przynajmniej jedną kategorię")
+        return redirect('categories')
     form = ProductForm()
     if request.method == "POST":
         form = ProductForm(request.POST, user=request.user)
