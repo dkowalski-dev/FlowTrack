@@ -4,7 +4,11 @@ from .models import Category, Product
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['name', 'vat']
+        labels = {
+            'name': 'Nazwa',
+            'vat': 'Stawka VAT'
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
