@@ -44,6 +44,7 @@ class OfferForm(ModelForm):
 
         for name, field in self.fields.items():
             field.widget.attrs.update({"class": "form-control"})
+
     def save(self, commit=True):
         offer = super().save(commit=False)
         if self.user:
@@ -61,7 +62,8 @@ class OfferForm(ModelForm):
                     offer.client_type = ContentType.objects.get_for_model(CompanyClient)
                 else:
                     offer.client_type = None
-        offer.client_id = client.id if client else None
+            offer.client_id = client.id if client else None
+
         if commit:
             offer.save()
         return offer

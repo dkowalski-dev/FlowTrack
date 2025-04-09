@@ -36,18 +36,29 @@ def offer(request, pk):
     if not offer:
         return redirect('offers')
     if request.method == "POST":
-        form = NoteForm(request.POST)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.offer = offer
-            note.save()
-            return redirect('offer', offer.id)
+        if "note_form" in request.POST:
+            print("Notatka")
+            form = NoteForm(request.POST)
+            if form.is_valid():
+                note = form.save(commit=False)
+                note.offer = offer
+                note.save()
+                return redirect('offer', offer.id)
+        if "description_form" in request.POST:
+            print("Opis")
+            form = OfferForm(request.POST, instance=offer)
+            if form.is_valid():
+                form.save()
+                return redirect('offer', offer.id)
     context = {
         "offer": offer,
         "form": form,
         "notes": notes,
         "products": products
     }
+    if request.GET.get('edit') == 'description':
+        context['offer_form'] = OfferForm(instance=offer)
+        
     return render(request, "offers/offer.html", context)
 
 def add_product_to_offer(request, pk):

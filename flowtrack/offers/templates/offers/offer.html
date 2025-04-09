@@ -7,11 +7,28 @@
   <div class="row">
     <!-- Pierwsza kolumna -->
     <div class="col-md-6">
+      {% if offer_form %}
+      <div class="card card-primary card-outline mb-4">
+        <form method="POST">
+          {% csrf_token %}
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div class="card-title col-6"><strong>Edytuj opis</strong></div>
+          <div class="text-muted col-6 text-end">{{offer_form.status}}</div>
+        </div>
+        <div class="card-body">
+          <p class="muted">
+            {{offer_form.description}}
+          </p>
+          <button type="submit" class="btn btn-primary" name="description_form">Zatwierdź</button>
+        </div>
+        </form>
+      </div>
+      {% else %}
       <div class="card card-primary card-outline mb-4">
         <!--begin::Header-->
         <div class="card-header d-flex justify-content-between align-items-center">
           <div class="card-title col-6"><strong>Opis oferty</strong></div>
-          <div class="text-muted col-6 text-end"><strong>Status: {{ offer.status }}</strong></div>
+          <div class="text-muted col-6 text-end"><strong>Status: {{ offer.status }}</strong> <a class="bi bi-pencil" href="{% url 'offer' offer.id %}?edit=description"></a></div>
         </div>
         <!--end::Header-->
         
@@ -23,6 +40,7 @@
         </div>
         <!--end::Body-->
       </div>
+      {% endif %}
       {% if notes %}
       <div class="card mb-4">
         <div class="card-header">
@@ -63,7 +81,7 @@
                 {% endfor %}
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Zapisz</button>
+                <button type="submit" class="btn btn-primary" name="note_form">Zapisz</button>
             </div>
             <!--end::Footer-->
         </form>
