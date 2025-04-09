@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Offer, Status, Note
 from products.models import Product
 from .forms import StatusForm, OfferForm, NoteForm, OfferProductsForm
+from django.contrib import messages
 
 def offers(request):
     offers = Offer.objects.filter(owner=request.user)
@@ -9,8 +10,11 @@ def offers(request):
     return render(request, "offers/offers.html", context)
 
 def create_offer(request):
-    form = OfferForm(user=request.user)
+    if Status.objects.filter(owner=request.user).first() is None:
+        messages.warning(request, "Aby utworzyć ofertę musisz dodać przynajmniej jeden status")
+        return redirect('create-status')
 
+    form = OfferForm(user=request.user)
     if request.method == "POST":
         form = OfferForm(request.POST, user=request.user)
         if form.is_valid():

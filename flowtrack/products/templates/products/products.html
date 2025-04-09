@@ -6,11 +6,11 @@
     <div class="container-fluid">
       <!--begin::Row-->
       <div class="row">
-        <div class="col-sm-6"><h3 class="mb-0">Simple Tables</h3></div>
+        <div class="col-sm-6"><h3 class="mb-0">Lista produktów</h3></div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-end">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Simple Tables</li>
+            <li class="breadcrumb-item"><a href="{% url 'categories'%}">Kategorie</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'create-product'%}">Dodaj produkt</a></li>
           </ol>
         </div>
       </div>
@@ -28,7 +28,7 @@
         <div class="col-md-12">
           <div class="card mb-4">
             <div class="card-header">
-              <h3 class="card-title">Lista produktów</h3>
+              <h3 class="card-title">tutaj będą opcje sortowania</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
@@ -51,8 +51,8 @@
                             <td>{{product.name}}</td>
                             <td>{{product.description}}</td>
                             <td>{{product.category}}</td>
-                            <td>{{product.purchase_price}}</td>
-                            <td>{{product.sale_price}}</td>
+                            <td>{{product.purchase_formatted}} zł</td>
+                            <td>{{product.sale_formatted}} zł</td>
                             <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('product', '{{ product.id }}')"> Usuń</button>
                             <a class="btn btn-primary btn-sm" href="{% url 'update-product' product.id %}">Edytuj</a></td>
                         </tr>

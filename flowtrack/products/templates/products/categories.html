@@ -19,7 +19,7 @@
             <tbody>
             {% for category in categories %}
               <tr class="align-middle">
-                <td>{{ category.name }}</td>
+                <td>{{ category.full_name }}</td>
                 <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('category', '{{ category.id }}')"> Usuń</button></td>
                 <td><a class="btn btn-primary btn-sm" href="#">Edytuj</a></td>
               </tr>
@@ -45,6 +45,7 @@
             <div class="card-body">
                 {% for field in form %}
                 <div class="mb-3">
+                    {{ field.label }}
                     {{ field }}
                     {{ field.errors }}
                 </div>

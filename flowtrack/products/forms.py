@@ -1,10 +1,15 @@
 from django.forms import ModelForm
 from .models import Category, Product
+from django.core.exceptions import ValidationError
 
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['name', 'vat']
+        labels = {
+            'name': 'Nazwa',
+            'vat': 'Stawka VAT'
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,3 +38,8 @@ class ProductForm(ModelForm):
         if commit:
             product.save()
         return product
+    
+    def clean_sale_price(self):
+        if self.cleaned_data['purchase_price'] > self.cleaned_data['sale_price']:
+            raise ValidationError("Cena sprzedaży nie może być niższa niż cena zakupu")
+        return self.cleaned_data['sale_price']
