@@ -51,8 +51,8 @@
                             <td>{{product.name}}</td>
                             <td>{{product.description}}</td>
                             <td>{{product.category}}</td>
-                            <td>{{product.purchase_price}}</td>
-                            <td>{{product.sale_price}}</td>
+                            <td>{{product.purchase_formatted}} zł</td>
+                            <td>{{product.sale_formatted}} zł</td>
                             <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('product', '{{ product.id }}')"> Usuń</button>
                             <a class="btn btn-primary btn-sm" href="{% url 'update-product' product.id %}">Edytuj</a></td>
                         </tr>
