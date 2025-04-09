@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from products.models import Product
+from offers.models import Offer
 from django.contrib import messages
 
 def delete_object(request, model_name, object_id):
@@ -8,7 +9,11 @@ def delete_object(request, model_name, object_id):
         if Product.objects.filter(owner=request.user, category=object_id).first() != None:
             messages.warning(request, "Nie możesz usunąć kategorii jeżeli masz do niej przypisane produkty")
             return redirect('categories')
-        
+    
+    if model_name == "status":
+        if Offer.objects.filter(owner=request.user, status=object_id).first() != None:
+            messages.warning(request, "Nie możesz usunąć statusu jeśli masz do niego przypisane oferty")
+            return redirect('statuses')
     content_type = get_object_or_404(ContentType, model=model_name)
     model = content_type.model_class()
     obj = get_object_or_404(model, id=object_id)
