@@ -1,3 +1,6 @@
 .venv/
 template/
 flowtrack/static/adminlte/
+__pycache__/
+*.pyc
+db.sqlite3
