@@ -53,9 +53,17 @@
             <tbody>
             {% for note in notes %}
               <tr class="align-middle">
+                {% if edit_note_form and note.id == edit_note_form.instance.id %}
+                <form method = "POST">
+                  {% csrf_token %}
+                <td>{{ edit_note_form.content }}</td>
+                <td><button type="submit" class="btn btn-primary" name="edit_note_form">Zatwierdź</button></td>
+                </form>
+                {% else %}
                 <td>{{ note.content }}</td>
                 <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('note', '{{ note.id }}')"> Usuń</button></td>
-                <td><a class="btn btn-primary btn-sm" href="#">Edytuj</a></td>
+                <td><a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=note&note_id={{note.id}}">Edytuj</a></td>
+                {% endif %}
               </tr>
               {% endfor %}
             </tbody>
@@ -73,7 +81,7 @@
             {% csrf_token %}
             <!--begin::Body-->
             <div class="card-body">
-                {% for field in form %}
+                {% for field in new_note_form %}
                 <div class="mb-3">
                     {{ field }}
                     {{ field.errors }}
@@ -81,7 +89,7 @@
                 {% endfor %}
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary" name="note_form">Zapisz</button>
+                <button type="submit" class="btn btn-primary" name="new_note_form">Zapisz</button>
             </div>
             <!--end::Footer-->
         </form>

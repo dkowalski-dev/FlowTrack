@@ -28,7 +28,7 @@ def create_offer(request):
     return render(request, "form_template.html", context)
 
 def offer(request, pk):
-    form = NoteForm()
+    new_note_form = NoteForm()
     offer = Offer.objects.filter(owner=request.user, id=pk).first()
     products = offer.products.all()
     notes = Note.objects.filter(offer=offer.id)
@@ -36,29 +36,40 @@ def offer(request, pk):
     if not offer:
         return redirect('offers')
     if request.method == "POST":
-        if "note_form" in request.POST:
-            print("Notatka")
-            form = NoteForm(request.POST)
-            if form.is_valid():
-                note = form.save(commit=False)
+        if "new_note_form" in request.POST:
+            new_note_form = NoteForm(request.POST)
+            if new_note_form.is_valid():
+                note = new_note_form.save(commit=False)
                 note.offer = offer
                 note.save()
                 return redirect('offer', offer.id)
+        if "edit_note_form" in request.POST:
+            note = Note.objects.filter(id=request.GET.get('note_id')).first()
+            if note:
+                edit_note_form = NoteForm(request.POST, instance=note)
+                if edit_note_form.is_valid():
+                    edit_note_form.save()
+                    return redirect('offer', offer.id)
+            else:
+                messages.warning(request,"Coś poszło nie tak")
+                return redirect('offer', offer.id)
         if "description_form" in request.POST:
-            print("Opis")
-            form = OfferForm(request.POST, instance=offer)
-            if form.is_valid():
-                form.save()
+            offer_form = OfferForm(request.POST, instance=offer)
+            if offer_form.is_valid():
+                offer_form.save()
                 return redirect('offer', offer.id)
     context = {
         "offer": offer,
-        "form": form,
+        "new_note_form": new_note_form,
         "notes": notes,
         "products": products
     }
     if request.GET.get('edit') == 'description':
         context['offer_form'] = OfferForm(instance=offer)
-        
+    if request.GET.get('edit') == 'note':
+        note = Note.objects.filter(id=request.GET.get('note_id')).first()
+        if note:
+            context['edit_note_form'] = NoteForm(instance=note)
     return render(request, "offers/offer.html", context)
 
 def add_product_to_offer(request, pk):
