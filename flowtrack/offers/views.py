@@ -58,6 +58,13 @@ def offer(request, pk):
             if offer_form.is_valid():
                 offer_form.save()
                 return redirect('offer', offer.id)
+            
+        if "client_form" in request.POST:
+            client_form = OfferForm(request.POST, instance=offer, user=request.user)
+            if client_form.is_valid():
+                print("Poprawny")
+                client_form.save()
+                return redirect('offer', offer.id) 
     context = {
         "offer": offer,
         "new_note_form": new_note_form,
@@ -70,6 +77,8 @@ def offer(request, pk):
         note = Note.objects.filter(id=request.GET.get('note_id')).first()
         if note:
             context['edit_note_form'] = NoteForm(instance=note)
+    if request.GET.get('edit') == 'client':
+        context['client_form'] = OfferForm(instance=offer, user=request.user)
     return render(request, "offers/offer.html", context)
 
 def add_product_to_offer(request, pk):

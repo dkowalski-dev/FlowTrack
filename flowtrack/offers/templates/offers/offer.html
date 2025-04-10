@@ -3,6 +3,23 @@
 {% block title %}Oferta{% endblock title %}
 
 {% block main %}
+<div class="app-content-header">
+  <!--begin::Container-->
+  <div class="container-fluid">
+    <!--begin::Row-->
+    <div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Zarządzaj ofertą</h3></div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-end">
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=client">Zmień klienta</a></li>
+          <li class="breadcrumb-item"><button class="btn btn-danger btn-sm" onclick="confirmDelete('offer', '{{ offer.id }}')"> Usuń oferte</button></li>
+        </ol>
+      </div>
+    </div>
+    <!--end::Row-->
+  </div>
+  <!--end::Container-->
+</div>
 <div class="app-content">
   <div class="row">
     <!-- Pierwsza kolumna -->
@@ -99,10 +116,21 @@
     
     <!-- Druga kolumna -->
     <div class="col-md-6">
+      {% if client_form %}
+      <form method="POST">
+        {% csrf_token %}
+          {{client_form.client}}
+          <input type="hidden" name="status" value="{{ offer.status.id }}" />
+        <button type="submit" class="btn btn-primary" name="client_form">Zapisz</button>
+      </form>
+      {% else %}
       <div class="small-box text-bg-warning">
         <div class="inner">
           {% if offer.client_type.model == "companyclient" %}
-          <h2>Dane firmy</h2>
+          <div class="row">
+            <div class="col-6"><h2>Dane firmy</h2></div>
+            <div class="col-6 text-end"><a class="bi bi-pencil" href="{% url 'update-client' offer.client.id 'com' %}"></a></div>
+          </div>
           <div class="row">
             <div class="col-md-6">
               <p>Nazwa: {{ offer.client.company_name }}</p>
@@ -114,7 +142,10 @@
             </div>
           </div>
           {% elif offer.client_type.model == "individualclient" %}
-          <h2>Dane klienta</h2>
+          <div class="row">
+            <div class="col-6"><h2>Dane klienta</h2></div>
+            <div class="col-6 text-end"><a class="bi bi-pencil" href="{% url 'update-client' offer.client.id 'ind' %}"></a></div>
+          </div>
           <div class="row">
             <div class="col-md-6">
               <p>Imię: {{ offer.client.name }}</p>
@@ -136,7 +167,7 @@
           </div>
         </div>
       </div>
-      
+      {% endif %}
       <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
           <div class="col-6"><h3 class="card-title"><strong>Produkty związane z ofertą</strong></h3></div>

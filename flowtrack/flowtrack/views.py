@@ -14,10 +14,18 @@ def delete_object(request, model_name, object_id):
         if Offer.objects.filter(owner=request.user, status=object_id).first() != None:
             messages.warning(request, "Nie możesz usunąć statusu jeśli masz do niego przypisane oferty")
             return redirect('statuses')
+        
+    if model_name == "individual_client" or model_name == "company_client":
+        if Offer.objects.filter(owner=request.user, client_id=object_id, client_type=model_name).first() != None:
+            messages.warning(request, "Nie możesz usunąć klienta jeśli masz przypisane do niego oferty!") # nie działa trzeba poprawić
+            return redirect("clients", 'all')
+        
     content_type = get_object_or_404(ContentType, model=model_name)
     model = content_type.model_class()
     obj = get_object_or_404(model, id=object_id)
     obj.delete()
-
+    if model_name == "offer":
+        messages.info("Oferta została usunięta")
+        return redirect('offers')
     last_page = request.GET.get('lastpage', 'offers')
     return redirect(last_page)
