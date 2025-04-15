@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
+from urllib.parse import urlencode
 from products.models import Product
 from offers.models import Offer
 from django.contrib import messages
@@ -33,7 +34,8 @@ def delete_object(request, model_name, object_id):
     obj = get_object_or_404(model, id=object_id)
     obj.delete()
     if model_name == "offer":
-        messages.info("Oferta została usunięta")
-        return redirect('offers')
+        messages.info(request, "Oferta została usunięta")
+        query_string = urlencode({"status": "ongoing"})
+        return redirect(f"/offers?{query_string}")
     last_page = request.GET.get('lastpage', 'offers')
     return redirect(last_page)

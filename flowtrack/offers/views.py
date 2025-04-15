@@ -6,6 +6,9 @@ from django.contrib import messages
 
 def offers(request):
     offers = Offer.objects.filter(owner=request.user)
+    status_filter = request.GET.getlist('status')
+    if status_filter:
+        offers = offers.filter(status__type__in=status_filter)
     context = {"offers": offers}
     return render(request, "offers/offers.html", context)
 
