@@ -30,7 +30,7 @@
         >
           <li class="nav-header">OFERTY</li>
           <li class="nav-item">
-            <a href="{% url 'offers' %}" class="nav-link">
+            <a href="{% url 'offers' %}?status=ongoing" class="nav-link">
               <i class="nav-icon bi bi-download"></i>
               <p>Oferty w toku</p>
             </a>
@@ -45,19 +45,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'offers' %}?status=failed&status=success" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Wszystkie</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'offers' %}?status=success" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Zaakceptowane</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'offers' %}?status=failed" class="nav-link">
                   <i class="nav-icon bi bi-circle"></i>
                   <p>Odrzucone</p>
                 </a>
