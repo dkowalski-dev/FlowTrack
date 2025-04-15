@@ -53,6 +53,7 @@ def offer(request, pk):
             else:
                 messages.warning(request,"Coś poszło nie tak")
                 return redirect('offer', offer.id)
+            
         if "description_form" in request.POST:
             offer_form = OfferForm(request.POST, instance=offer)
             if offer_form.is_valid():
@@ -79,6 +80,7 @@ def offer(request, pk):
             context['edit_note_form'] = NoteForm(instance=note)
     if request.GET.get('edit') == 'client':
         context['client_form'] = OfferForm(instance=offer, user=request.user)
+    
     return render(request, "offers/offer.html", context)
 
 def add_product_to_offer(request, pk):
