@@ -21,7 +21,7 @@ def delete_object(request, model_name, object_id):
     elif model_name == "companyclient":
         model_class = CompanyClient
 
-    if model_name == "individualclient" or "companyclient":
+    if model_name == "individualclient" or model_name == "companyclient":
         user_type = ContentType.objects.get_for_model(model_class)
         print(user_type, type(user_type))
         if Offer.objects.filter(owner=request.user, client_id=object_id, client_type=user_type).first() != None:
