@@ -3,13 +3,21 @@ from .models import Offer, Status, Note
 from products.models import Product
 from .forms import StatusForm, OfferForm, NoteForm, OfferProductsForm
 from django.contrib import messages
+from usersapp.models import UserSettings
 
 def offers(request):
+    settings = UserSettings.objects.get_or_create(user=request.user)[0]
     offers = Offer.objects.filter(owner=request.user)
     status_filter = request.GET.getlist('status')
     if status_filter:
         offers = offers.filter(status__type__in=status_filter)
-    context = {"offers": offers}
+    else:
+        offers = offers.filter(status__type__in=['ongoing'])
+    offers = offers.order_by(settings.default_sort or '-created')
+    context = {
+        "offers": offers,
+        "settings": settings
+        }
     return render(request, "offers/offers.html", context)
 
 def create_offer(request):
@@ -66,7 +74,6 @@ def offer(request, pk):
         if "client_form" in request.POST:
             client_form = OfferForm(request.POST, instance=offer, user=request.user)
             if client_form.is_valid():
-                print("Poprawny")
                 client_form.save()
                 return redirect('offer', offer.id) 
     context = {

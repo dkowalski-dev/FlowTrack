@@ -18,5 +18,12 @@ class UserSettings(models.Model):
     show_client_region = models.BooleanField(default=True)
     show_status = models.BooleanField(default=True)
     show_description = models.BooleanField(default=False)
-    default_sort = models.CharField
+    choices = (
+        ('-created', 'Od najnowszych'),
+        ('created', 'Od najstarszych'),
+        ('status__name', 'Po statusie'),
+        ('description', 'Po opisie'),
+        ('client__name', 'Po nazwie klienta')
+    )
+    default_sort = models.CharField(max_length=20, choices=choices, default='-created')
 

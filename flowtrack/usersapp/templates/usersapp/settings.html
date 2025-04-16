@@ -1,0 +1,46 @@
+{% extends "main.html" %}
+
+{% block title %}Ustawienia{% endblock %}
+
+{% block main %}
+<div class="d-flex justify-content-center">
+    <div class="col-md-6">
+        <div class="card card-primary card-outline mb-4">
+            <div class="card-header"><div class="card-title">{{title}}</div></div>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="card-body">
+                    {% for field in infoform %}
+                    <div class="mb-3">
+                        {{ field.label }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                </div>
+            </form>
+        </div>
+        <div class="card card-primary card-outline mb-4">
+            <div class="card-header"><div class="card-title">{{title}}</div></div>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="card-body">
+                    {% for field in preferencesform %}
+                    <div class="mb-3">
+                        {{ field.label }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+{% endblock %}
