@@ -30,8 +30,8 @@ class UserInfoForm(ModelForm):
 class UserPreferencesForm(ModelForm):
     class Meta:
         model = UserSettings
-        fields = ['show_created', 'show_client', 'show_client_email', 'show_client_phone', 'show_client_address',
-                  'show_client_region', 'show_status', 'show_description', 'default_sort']
+        fields = ['show_created', 'show_client', 'show_description', 'show_client_address', 'show_client_region',
+                  'show_client_email', 'show_client_phone', 'show_status',  'default_sort']
         labels = {
             'show_created': "Wyświetlaj datę", 
             'show_client': "Wyświetl nazwę klienta", 

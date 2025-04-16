@@ -12,8 +12,14 @@ def offers(request):
     if status_filter:
         offers = offers.filter(status__type__in=status_filter)
     else:
-        offers = offers.filter(status__type__in=['ongoing'])
-    offers = offers.order_by(settings.default_sort or '-created')
+        offers = offers.filter(status__type = 'ongoing')
+    
+    if settings.default_sort == "client":
+        offers = sorted(offers, key = lambda offer: offer.client.company_name.lower() if hasattr(offer.client, 'company_name') else offer.client.name.lower())
+    elif settings.default_sort == "region":
+        offers = sorted(offers, key = lambda offer: offer.client.region )
+    else:
+        offers = offers.order_by(settings.default_sort or '-created')
     context = {
         "offers": offers,
         "settings": settings

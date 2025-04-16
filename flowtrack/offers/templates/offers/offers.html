@@ -1,6 +1,19 @@
 {% extends "main.html" %}
 {% block title %}Oferty{% endblock title %}
 {% block main %}
+<div class="app-content-header">
+  <!--begin::Container-->
+  <div class="container-fluid">
+    <!--begin::Row-->
+    <div class="row">
+      <div class="col-sm-6">
+        Tutaj pojawią się opcje sortowania na bieżąco i opcje usuwania wielu naraz
+      </div>
+    </div>
+    <!--end::Row-->
+  </div>
+  <!--end::Container-->
+</div>
 <div class="app-content">
     <!--begin::Container-->
     <div class="container-fluid">
@@ -17,25 +30,59 @@
               <table class="table table-sm">
                 <thead>
                   <tr>
-                    <th>Data</th>
-                    <th>Klient</th>
-                    <th>Miasto</th>
-                    <th>Region</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th>Status</th>
+                    {% if settings.show_created %}
+                      <th>Data</th>
+                    {% endif %}
+                    {% if settings.show_client %}
+                      <th>Klient</th>
+                    {% endif %}
+                    {% if settings.show_description %}
+                      <th>Opis</th>
+                    {% endif %}
+                    {% if settings.show_client_address %}
+                      <th>Adres</th>
+                    {% endif %}
+                    {% if settings.show_client_region %}
+                      <th>Region</th>
+                    {% endif %}
+                    {% if settings.show_client_email %}
+                      <th>Email</th>
+                    {% endif %}
+                    {% if settings.show_client_phone %}
+                      <th>Telefon</th>
+                    {% endif %}
+                    {% if settings.show_status %}
+                      <th>Status</th>
+                    {% endif %}
                   </tr>
                 </thead>
                 <tbody>
                 {% for offer in offers %}
                 <tr class="align-middle" onclick="window.location='{% url 'offer' offer.id %}';" style="cursor: pointer;">
-                    <td>{{ offer.created }}</td>
-                    <td>{{ offer.client }}</td>
-                    <td>{{ offer.client.address}}</td>
-                    <td>{{ offer.client.region }}</td>
-                    <td>{{ offer.client.email}}</td>
-                    <td>{{ offer.client.phone}}</td>
-                    <td>{{ offer.status }}</td>
+                    {% if settings.show_created %}
+                      <td>{{ offer.created }}</td>
+                    {% endif %}
+                    {% if settings.show_client %}
+                      <td>{{ offer.client }}</td>
+                    {% endif %}
+                    {% if settings.show_description %}
+                      <td>{{ offer.description }}</td>
+                    {% endif %}
+                    {% if settings.show_client_address %}
+                     <td>{{ offer.client.address}}</td>
+                    {% endif %}
+                    {% if settings.show_client_region %}
+                      <td>{{ offer.client.get_region_display }}</td>
+                    {% endif %}
+                    {% if settings.show_client_email %}
+                      <td>{{ offer.client.email}}</td>
+                    {% endif %}
+                    {% if settings.show_client_phone %}
+                      <td>{{ offer.client.phone}}</td>
+                    {% endif %}
+                    {% if settings.show_status %}
+                      <td>{{ offer.status }}</td>
+                    {% endif %}
                   </tr>
                   {% endfor %}
                 </tbody>
