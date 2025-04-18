@@ -2,10 +2,18 @@ from django.shortcuts import render, redirect
 from .models import Product, Category
 from .forms import ProductForm, CategoryForm
 from django.contrib import messages
+from django.core.paginator import Paginator
+from flowtrack.utils import paginObjects
 
 def products(request):
     products = Product.objects.filter(owner=request.user)
-    return render(request,"products/products.html", {"products": products})
+    products, page_range = paginObjects(request, products, 10)
+    context = {
+        "products": products,
+        "current_page": products.number,
+        "page_range": page_range
+    }
+    return render(request,"products/products.html", context)
 
 def create_product(request):
     if Category.objects.filter(owner=request.user).first () == None:

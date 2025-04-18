@@ -39,3 +39,11 @@ def delete_object(request, model_name, object_id):
         return redirect(f"/offers?{query_string}")
     last_page = request.GET.get('lastpage', 'offers')
     return redirect(last_page)
+
+def delete_multiple_objects(request):
+    model = request.POST.get('model')
+    if model == "product":
+        selected_ids = request.POST.getlist('selected_ids')
+        Product.objects.filter(owner=request.user, id__in=selected_ids).delete()
+        return redirect("products")
+    return redirect("products")

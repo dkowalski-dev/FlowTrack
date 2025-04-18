@@ -27,6 +27,7 @@ urlpatterns = [
     path('clients/', include('clients.urls')),
     path('products/', include('products.urls')),
     path('delete/<str:model_name>/<uuid:object_id>/', views.delete_object, name='delete-object'),
+    path('delete-multiple-objects', views.delete_multiple_objects, name='delete-multiple-objects'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

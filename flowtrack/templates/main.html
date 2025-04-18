@@ -60,6 +60,16 @@
       integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
       crossorigin="anonymous"
     />
+    <style>
+      tr.selectable-row {
+        cursor: pointer;
+      }
+      td.wrap-text {
+        white-space: normal;
+        word-wrap: break-word;
+        max-width: 300px; /* albo ile chcesz */
+      }
+    </style>
   </head>
   <!--end::Head-->
 
@@ -151,6 +161,18 @@
     <!--end::OverlayScrollbars Configure-->
     <!-- OPTIONAL SCRIPTS -->
     <!-- apexcharts -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("delete-multiple-objects"); // Upewnij się, że Twój formularz ma takie ID
+    
+        form.addEventListener("submit", function (event) {
+          const confirmed = confirm("Czy na pewno chcesz usunąć zaznaczone elementy?");
+          if (!confirmed) {
+            event.preventDefault(); // Zatrzymaj wysyłanie formularza
+          }
+        });
+      });
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
       integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
