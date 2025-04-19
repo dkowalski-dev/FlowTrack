@@ -24,7 +24,6 @@
   <div class="row">
     <!-- Pierwsza kolumna -->
     <div class="col-md-6">
-      {% if categories %}
       <div class="card mb-4">
         <div class="card-header">
           <div class="row">
@@ -69,6 +68,7 @@
             </div>
           </div>
         </div>
+        {% if categories %}
         <div class="card-body p-0">
           <table class="table table-sm">
             <tbody>
@@ -82,9 +82,10 @@
             </tbody>
           </table>
         </div>
+        {% endif %}
         <!-- /.card-body -->
       </div>
-      {% endif %}
+      
     </div>
     
     <!-- Druga kolumna -->

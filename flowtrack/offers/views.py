@@ -4,6 +4,8 @@ from products.models import Product
 from .forms import StatusForm, OfferForm, NoteForm, OfferProductsForm
 from django.contrib import messages
 from usersapp.models import UserSettings
+from flowtrack.utils import paginObjects
+from django.db.models import Q
 
 def offers(request):
     settings = UserSettings.objects.get_or_create(user=request.user)[0]
@@ -128,28 +130,28 @@ def delete_product_from_offer(request, pk, pi):
     return redirect('offer', offer.id)
 
 def statuses(request):
-    statuses = Status.objects.filter(owner=request.user)
-    context = {
-        "statuses": statuses
-    }
-    return render(request, "offers/statuses.html", context)
+    search_query = request.GET.get('search_query', '')
+    statuses = Status.objects.filter(owner=request.user).filter(
+        Q(name__icontains=search_query)
+    )
+    statuses, page_range = paginObjects(request, statuses, 3)
 
-def create_status(request):
     form = StatusForm()
-
     if request.method == "POST":
         form = StatusForm(request.POST)
         if form.is_valid():
             status = form.save(commit=False)
             status.owner = request.user
             status.save()
-            return redirect('offers')
+            return redirect('statuses')
         
     context = {
+        "search_query": search_query,
+        "statuses": statuses,
         "form": form,
-        "title": "Dodaj status"
-       }
-    return render(request, "form_template.html", context)
+        "page_range": page_range
+    }
+    return render(request, "offers/statuses.html", context)
 
 def update_status(request, pk):
     status = Status.objects.get(id=pk)

@@ -1,8 +1,26 @@
 {% extends "main.html" %}
 {% block title %}Lista klientów{% endblock title %}
 {% block main %}
+<div class="app-content-header">
+  <!--begin::Container-->
+  <div class="container-fluid">
+    <!--begin::Row-->
+    <div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Lista klientów</h3></div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-end">
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'offers' %}">Oferty</a></li>
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'create-client' 'com' %}">Dodaj firme</a></li>
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'create-client' 'ind' %}">Dodaj osobę prywatną</a></li>
+        </ol>
+      </div>
+    </div>
+    <!--end::Row-->
+  </div>
+  <!--end::Container-->
+</div>
 <div class="app-content">
-    {% if company_client_list %}
+    
     <!--begin::Container-->
     <div class="container-fluid">
       <!--begin::Row-->
@@ -20,7 +38,7 @@
                   <button type="submit" class="btn btn-primary">
                     <i class="bi bi-search"></i>
                   </button>
-                  <a href="{% url 'clients' client_type %}" class="btn btn-primary">
+                  <a href="{% url 'clients' client_type %}?individual_page={{individual_page}}&individual_search_query={{individual_search_query}}" class="btn btn-primary">
                     <i class="bi bi-arrow-counterclockwise"></i>
                   </a>
                 </form>
@@ -57,9 +75,10 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
+              {% if company_client_list %}
               <table class="table table-sm">
                 <thead>
-                  <tr>
+                  <tr >
                     <th>Nazwa firmy</th>
                     <th>NIP</th>
                     <th>Osoba do kontaktu</th>
@@ -87,7 +106,7 @@
                   {% endfor %}
                 </tbody>
               </table>
-              
+              {% endif %}
             </div>
             <!-- /.card-body -->
           </div>
@@ -98,8 +117,7 @@
       <!--end::Row-->
     </div>
     <!--end::Container-->
-  {% endif %}
-  {% if individual_client_list %}
+  
   <!--end::App Content-->
     <!--begin::Container-->
     <div class="container-fluid">
@@ -118,7 +136,7 @@
                   <button type="submit" class="btn btn-primary">
                     <i class="bi bi-search"></i>
                   </button>
-                  <a href="{% url 'clients' client_type %}" class="btn btn-primary">
+                  <a href="{% url 'clients' client_type %}?company_page={{company_page}}&company_search_query={{company_search_query}}" class="btn btn-primary">
                     <i class="bi bi-arrow-counterclockwise"></i>
                   </a>
                 </form>
@@ -129,7 +147,7 @@
                   <ul class="pagination pagination-sm">
                     {% if individual_client_list.has_previous %}
                     <li class="page-item">
-                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{individual_client_list.previous_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Previous">
+                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{individual_client_list.previous_page_number}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                       </a>
                     </li>
@@ -143,7 +161,7 @@
                     {% endfor %}
                     {% if individual_client_list.has_next %}
                     <li class="page-item">
-                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{individual_client_list.next_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Next">
+                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{individual_client_list.next_page_number}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                       </a>
                     </li>
@@ -155,6 +173,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
+              {% if individual_client_list %}
               <table class="table table-sm">
                 <thead>
                   <tr>
@@ -183,6 +202,7 @@
                   {% endfor %}
                 </tbody>
               </table>
+              {% endif %}
             </div>
             <!-- /.card-body -->
           </div>
@@ -192,7 +212,7 @@
       </div>
       <!--end::Row-->
     </div>
-    {% endif %}
+    
     <!--end::Container-->
   </div>
   <!--end::App Content-->

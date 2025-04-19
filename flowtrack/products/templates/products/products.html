@@ -48,11 +48,12 @@
               <div class="text-muted col-6 text-end">
                 <form action="{% url 'delete-multiple-objects' %}" method="POST" id="delete-multiple-objects">
                   {% csrf_token %}
-                <button class="btn btn-danger btn-sm" type="submit">Usuń zaznaczone</button>
+                {% if products %}<button class="btn btn-danger btn-sm" type="submit">Usuń zaznaczone</button>{% endif %}
               </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
+              {% if products %}
               <table class="table table-sm">
                 <input type="hidden" name="model" value="product">
                 <thead>
@@ -83,6 +84,7 @@
                 </tbody>
               </table>
             </div>
+            {% endif %}
         </div>
         <!-- /.col -->
       </form>

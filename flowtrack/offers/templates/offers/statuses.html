@@ -1,65 +1,126 @@
 {% extends "main.html" %}
 {% block title %}Statusy{% endblock title %}
 {% block main %}
-<div class="app-content">
-    <div class="app-content-header">
-      <!--begin::Container-->
-      <div class="container-fluid">
-        <!--begin::Row-->
-        <div class="row">
-          <div class="col-sm-6"><h3 class="mb-0">Edytuj statusy</h3></div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-end">
-              <li class="breadcrumb-item"><a href="{% url 'create-status' %}">Dodaj status</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Simple Tables</li>
-            </ol>
-          </div>
-        </div>
-        <!--end::Row-->
+<div class="app-content-header">
+  <!--begin::Container-->
+  <div class="container-fluid">
+    <!--begin::Row-->
+    <div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Zarządzaj statusami</h3></div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-end">
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'offers' %}">Pokaż oferty</a></li>
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'products'%}">Pokaż produkty</a></li>
+        </ol>
       </div>
-      <!--end::Container-->
     </div>
-    <!--begin::Container-->
-    <div class="container-fluid">
-      <!--begin::Row-->
-      <div class="row">
-        <div class="col-12">
-          <!-- /.card -->
-          <div class="card mb-4">
-            <div class="card-header">
-              <h3 class="card-title">Twoje statusy</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body p-0">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>Nazwa</th>
-                    <th>Rodzaj</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                {% for status in statuses %}
-                  <tr class="align-middle">
-                    <td>{{ status.name }}</td>
-                    <td>{{ status.get_type_display  }}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('status', '{{ status.id }}')"> Usuń</button>
-                    <a class="btn btn-primary btn-sm" href="{% url 'update-status' status.id %}">Edytuj</a></td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!--end::Row-->
-    </div>
-    <!--end::Container-->
+    <!--end::Row-->
   </div>
-  <!--end::App Content-->
+  <!--end::Container-->
+</div>
+<div class="app-content">
+  <div class="row">
+    <!-- Pierwsza kolumna -->
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-8">
+              <form method="GET" action="{% url 'statuses' %}" class="form-inline d-flex gap-2">
+                <input class="form-control" type="text" name="search_query"
+                  value="{{search_query}}" placeholder="Szukaj po nazwie" />
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-search"></i>
+                </button>
+                <a href="{% url 'statuses' %}" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+              </form>
+            </div>
+            <div class="col-md-4">
+              <div class="card-tools float-end">
+                {% if statuses.has_next or statuses.has_previous %}
+                <ul class="pagination pagination-sm">
+                  {% if statuses.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="{% url 'statuses'%}?page={{statuses.previous_page_number}}&search_query={{search_query}}" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% for page in page_range %}
+                  {% if page == statuses.number %}
+                  <li class="page-item active"><a class="page-link" href="{% url 'statuses'%}?page={{page}}&search_query={{search_query}}">{{ page }}</a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="{% url 'statuses'%}?page={{page}}&search_query={{search_query}}">{{ page }}</a></li>
+                  {% endif %}
+                  {% endfor %}
+                  {% if statuses.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="{% url 'statuses'%}?page={{statuses.next_page_number}}&search_query={{search_query}}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% if statuses %}
+        <div class="card-body p-0">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Nazwa</th>
+                <th>Rodzaj</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for status in statuses %}
+              <tr class="align-middle">
+                <td>{{ status.name }}</td>
+                <td>{{ status.get_type_display  }}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('status', '{{ status.id }}')"> Usuń</button>
+                <a class="btn btn-primary btn-sm" href="{% url 'update-status' status.id %}">Edytuj</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        <!-- /.card-body -->
+      </div>
+    </div>
+    
+    <!-- Druga kolumna -->
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <!--begin::Header-->
+        <div class="card-header"><div class="card-title">Dodaj kategorie</div></div>
+        <!--end::Header-->
+        <!--begin::Form-->
+        <form method="POST">
+            {% csrf_token %}
+            <!--begin::Body-->
+            <div class="card-body">
+                {% for field in form %}
+                <div class="mb-3">
+                    {{ field.label }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            </div>
+            <!--end::Footer-->
+        </form>
+        <!--end::Form-->
+    </div>
+    </div>
+  </div>
+</div>
+
 {% endblock main %}
