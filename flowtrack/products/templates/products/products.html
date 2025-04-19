@@ -94,21 +94,21 @@
       <ul class="pagination justify-content-center">
         {% if products.has_previous %}
         <li class="page-item">
-          <a class="page-link" href="{% url 'products'%}?page={{products.previous_page_number}}" aria-label="Previous">
+          <a class="page-link" href="{% url 'products'%}?page={{products.previous_page_number}}&search_query={{search_query}}&category_query={{category_query}}" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         {% endif %}
         {% for page in page_range %}
         {% if page == products.number %}
-        <li class="page-item active"><a class="page-link" href="{% url 'products'%}?page={{page}}">{{ page }}</a></li>
+        <li class="page-item active"><a class="page-link" href="{% url 'products'%}?page={{page}}&search_query={{search_query}}&category_query={{category_query}}">{{ page }}</a></li>
         {% else %}
-        <li class="page-item"><a class="page-link" href="{% url 'products'%}?page={{page}}">{{ page }}</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'products'%}?page={{page}}&search_query={{search_query}}&category_query={{category_query}}">{{ page }}</a></li>
         {% endif %}
         {% endfor %}
         {% if products.has_next %}
         <li class="page-item">
-          <a class="page-link" href="{% url 'products'%}?page={{products.next_page_number}}" aria-label="Next">
+          <a class="page-link" href="{% url 'products'%}?page={{products.next_page_number}}&search_query={{search_query}}&category_query={{category_query}}" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
