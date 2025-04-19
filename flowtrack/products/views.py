@@ -2,16 +2,32 @@ from django.shortcuts import render, redirect
 from .models import Product, Category
 from .forms import ProductForm, CategoryForm
 from django.contrib import messages
-from django.core.paginator import Paginator
+from django.db.models import Q
 from flowtrack.utils import paginObjects
 
 def products(request):
-    products = Product.objects.filter(owner=request.user)
+    search_query = request.GET.get('search_query', '')
+    category_query = request.GET.get('category_query', '')
+    categories = Category.objects.filter(owner=request.user)
+
+    try: 
+        products = Product.objects.filter(owner=request.user, category_id=category_query).filter(
+        Q(serial_number__icontains=search_query) |
+        Q(name__icontains=search_query)
+        )
+    except: 
+        products = Product.objects.filter(owner=request.user).filter(
+        Q(serial_number__icontains=search_query) |
+        Q(name__icontains=search_query)
+        )
+
     products, page_range = paginObjects(request, products, 10)
     context = {
         "products": products,
-        "current_page": products.number,
-        "page_range": page_range
+        "page_range": page_range,
+        "search_query": search_query,
+        "category_query": category_query,
+        "categories": categories,
     }
     return render(request,"products/products.html", context)
 

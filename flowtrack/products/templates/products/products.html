@@ -25,13 +25,28 @@
     <div class="container-fluid">
       <!--begin::Row-->
       <div class="row">
-        <form action="{% url 'delete-multiple-objects' %}" method="POST" id="delete-multiple-objects">
-          {% csrf_token %}
         <div class="col-md-12">
           <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-              <div class="card-title col-6"><strong>Opcje sortowania</strong></div>
-              <div class="text-muted col-6 text-end"><button class="btn btn-danger btn-sm" type="submit">Usuń zaznaczone</button></div>
+              <div class="card-title col-6">
+                <form method="GET" action="{% url 'products' %}" class="form-inline d-flex gap-2">
+                  <input class="form-control" type="text" name="search_query"
+                    value="{{search_query}}" placeholder="Wpisz nazwę lub kod produktu" />
+                    <select name="category_query" class="form-control">
+                      <option value="">Wyświetlaj z danej kategorii</option>
+                      {% for category in categories %}
+                      <option value="{{category.id}}" {% if category.id|stringformat:"s" == category_query %} selected {% endif %}>{{category}}</option>
+                      {% endfor %}
+                    </select>
+                    <input class="btn btn-primary btn-sm" type="submit" value="Wyszukaj" />
+                </form>
+              </div>
+              
+              <div class="text-muted col-6 text-end">
+                <form action="{% url 'delete-multiple-objects' %}" method="POST" id="delete-multiple-objects">
+                  {% csrf_token %}
+                <button class="btn btn-danger btn-sm" type="submit">Usuń zaznaczone</button>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
@@ -81,7 +96,7 @@
         </li>
         {% endif %}
         {% for page in page_range %}
-        {% if page == current_page %}
+        {% if page == products.number %}
         <li class="page-item active"><a class="page-link" href="{% url 'products'%}?page={{page}}">{{ page }}</a></li>
         {% else %}
         <li class="page-item"><a class="page-link" href="{% url 'products'%}?page={{page}}">{{ page }}</a></li>
