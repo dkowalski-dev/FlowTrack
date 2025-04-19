@@ -21,6 +21,14 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = ['serial_number', 'name', 'description', 'category', 'purchase_price', 'sale_price']
+        labels = {
+            "serial_number": "Numer/Kod produktu",
+            "name": "Nazwa",
+            "description": "Opis",
+            "category": "Kategoria",
+            "purchase_price": "Cena zakupu",
+            "sale_price": "Cena sprzedaży"
+        }
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
