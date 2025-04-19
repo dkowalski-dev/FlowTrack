@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 {% block title %}Lista produktów{% endblock title %}
 {% block main %}
-<div class="app-content-header">
+ <div class="app-content-header">
     <!--begin::Container-->
     <div class="container-fluid">
       <!--begin::Row-->
@@ -9,8 +9,8 @@
         <div class="col-sm-6"><h3 class="mb-0">Lista produktów</h3></div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-end">
-            <li class="breadcrumb-item"><a href="{% url 'categories'%}">Kategorie</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'create-product'%}">Dodaj produkt</a></li>
+            <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'categories'%}">Kategorie</a></li>
+            <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'create-product'%}">Dodaj produkt</a></li>
           </ol>
         </div>
       </div>
@@ -38,7 +38,10 @@
                       <option value="{{category.id}}" {% if category.id|stringformat:"s" == category_query %} selected {% endif %}>{{category}}</option>
                       {% endfor %}
                     </select>
-                    <input class="btn btn-primary btn-sm" type="submit" value="Wyszukaj" />
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-search"></i>
+                    </button>
+                    <a href="{% url 'products' %}" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
                 </form>
               </div>
               
@@ -87,6 +90,7 @@
       <!--end::Row-->
     </div>
     <nav aria-label="Page navigation example">
+      {% if products.has_next or products.has_previous %}
       <ul class="pagination justify-content-center">
         {% if products.has_previous %}
         <li class="page-item">
@@ -110,6 +114,7 @@
         </li>
         {% endif %}
       </ul>
+      {% endif %}
     </nav>
     <!--end::Container-->
   </div>

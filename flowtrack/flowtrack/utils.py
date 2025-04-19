@@ -1,7 +1,6 @@
 from django.core.paginator import Paginator
 
 def paginObjects(request, objects, count):
-    
     paginator = Paginator(objects, count)
     page_number = request.GET.get("page", 1)
     objects = paginator.get_page(page_number)

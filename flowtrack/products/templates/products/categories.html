@@ -3,6 +3,23 @@
 {% block title %}Oferta{% endblock title %}
 
 {% block main %}
+<div class="app-content-header">
+  <!--begin::Container-->
+  <div class="container-fluid">
+    <!--begin::Row-->
+    <div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Zarządzaj kategoriami</h3></div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-end">
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'products'%}">Pokaż produkty</a></li>
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'create-product'%}">Dodaj produkt</a></li>
+        </ol>
+      </div>
+    </div>
+    <!--end::Row-->
+  </div>
+  <!--end::Container-->
+</div>
 <div class="app-content">
   <div class="row">
     <!-- Pierwsza kolumna -->
@@ -10,18 +27,56 @@
       {% if categories %}
       <div class="card mb-4">
         <div class="card-header">
-          <h3 class="card-title"><strong>Twoje kategorie</strong></h3>
+          <div class="row">
+            <div class="col-md-8">
+              <form method="GET" action="{% url 'categories' %}" class="form-inline d-flex gap-2">
+                <input class="form-control" type="text" name="search_query"
+                  value="{{search_query}}" placeholder="Wpisz nazwę kategorii" />
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-search"></i>
+                </button>
+                <a href="{% url 'categories' %}" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+              </form>
+            </div>
+            <div class="col-md-4">
+              <div class="card-tools float-end">
+                {% if categories.has_next or categories.has_previous %}
+                <ul class="pagination pagination-sm">
+                  {% if categories.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="{% url 'categories'%}?page={{categories.previous_page_number}}" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% for page in page_range %}
+                  {% if page == categories.number %}
+                  <li class="page-item active"><a class="page-link" href="{% url 'categories'%}?page={{page}}">{{ page }}</a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="{% url 'categories'%}?page={{page}}">{{ page }}</a></li>
+                  {% endif %}
+                  {% endfor %}
+                  {% if categories.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="{% url 'categories'%}?page={{categories.next_page_number}}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
         </div>
-        <!-- /.card-header -->
-         
         <div class="card-body p-0">
           <table class="table table-sm">
             <tbody>
             {% for category in categories %}
               <tr class="align-middle">
-                <td>{{ category.full_name }}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('category', '{{ category.id }}')"> Usuń</button></td>
-                <td><a class="btn btn-primary btn-sm" href="#">Edytuj</a></td>
+                <td class="col-10">{{ category.full_name }}</td>
+                <td class="col-1"><button class="btn btn-danger btn-sm" onclick="confirmDelete('category', '{{ category.id }}')"> Usuń</button></td>
+                <td class="col-1"><a class="btn btn-primary btn-sm" href="{% url 'update-category' category.id%}">Edytuj</a></td>
               </tr>
               {% endfor %}
             </tbody>
@@ -34,7 +89,7 @@
     
     <!-- Druga kolumna -->
     <div class="col-md-6">
-      <div class="card card-primary card-outline mb-4">
+      <div class="card mb-4">
         <!--begin::Header-->
         <div class="card-header"><div class="card-title">Dodaj kategorie</div></div>
         <!--end::Header-->

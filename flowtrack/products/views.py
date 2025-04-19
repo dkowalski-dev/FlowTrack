@@ -64,7 +64,9 @@ def update_product(request, pk):
 
 def categories(request):
     form = CategoryForm()
-    categories = Category.objects.filter(owner=request.user)
+    search_query = request.GET.get('search_query', '')
+    categories = Category.objects.filter(owner=request.user, name__icontains=search_query)
+    categories, page_range = paginObjects(request, categories, 10)
 
     if request.method == "POST":
         form = CategoryForm(request.POST)
@@ -77,6 +79,20 @@ def categories(request):
     context = {
         "form": form,
         "categories": categories,
+        "search_query": search_query,
+        "page_range": page_range
     }
     return render(request, "products/categories.html", context)
     
+def update_category(request, pk):
+    category = Category.objects.filter(owner=request.user, id=pk).first()
+    if category == None:
+        return redirect('categories')
+    form = CategoryForm(instance=category)
+    if request.method == "POST":
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('categories')
+    
+    return render(request, "form_template.html", {"form": form, "title": "Edytuj kategorię"})

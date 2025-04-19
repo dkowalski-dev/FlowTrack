@@ -21,6 +21,9 @@ class Category(models.Model):
     
     def __str__(self):
         return str(' '.join([self.name, self.vat+'%']))
+    
+    class Meta:
+        ordering = ['name']
 
 class Product(models.Model):
     
@@ -44,3 +47,6 @@ class Product(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    class Meta:
+        ordering = ['name']
