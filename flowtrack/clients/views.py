@@ -1,13 +1,50 @@
 from django.shortcuts import render, redirect
 from .models import IndividualClient, CompanyClient
 from .forms import IndividualClientForm, CompanyClientForm
+from django.db.models import Q
+from flowtrack.utils import paginObjects
 
 def clients(request, client_type):
-    individual_client_list = IndividualClient.objects.filter(owner=request.user) if client_type in ['all', 'ind'] else []
-    company_client_list = CompanyClient.objects.filter(owner=request.user) if client_type  in ['all', 'com'] else []
+    company_search_query = request.GET.get('company_search_query', '')
+    individual_search_query = request.GET.get('individual_search_query', '')
+
+    if client_type in ['all', 'com']:
+        company_client_list = CompanyClient.objects.filter(owner=request.user).filter(
+            Q(email__icontains=company_search_query) |
+            Q(phone__icontains=company_search_query) |
+            Q(address__icontains=company_search_query) |
+            Q(region__icontains=company_search_query) |
+            Q(contact_person__icontains=company_search_query) |
+            Q(company_name__icontains=company_search_query) |
+            Q(nip__icontains=company_search_query)
+        )
+        company_client_list, company_page_range = paginObjects(request, company_client_list, 2, page_key="company_page")
+    else:
+        company_client_list = []
+        company_page_range = 0
+
+    if client_type in ['all', 'ind']:
+        individual_client_list = IndividualClient.objects.filter(owner=request.user).filter(
+            Q(email__icontains=individual_search_query) |
+            Q(phone__icontains=individual_search_query) |
+            Q(address__icontains=individual_search_query) |
+            Q(region__icontains=individual_search_query) |
+            Q(name__icontains=individual_search_query) |
+            Q(last_name__icontains=individual_search_query) 
+        )
+        individual_client_list, individual_page_range = paginObjects(request, individual_client_list, 2, page_key="individual_page")
+    else:
+        individual_client_list = []
+        individual_page_range = 0
+
     context = {
         "individual_client_list": individual_client_list,
-        "company_client_list": company_client_list
+        "company_client_list": company_client_list,
+        "company_search_query": company_search_query,
+        "individual_search_query": individual_search_query,
+        "client_type": client_type,
+        "company_page_range": company_page_range,
+        "individual_page_range": individual_page_range
     }
     return render(request, "clients/clients.html", context)
 

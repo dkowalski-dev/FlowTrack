@@ -10,8 +10,50 @@
         <div class="col-12">
           <!-- /.card -->
           <div class="card mb-4">
-            <div class="card-header">
-              <h3 class="card-title">Firmy</h3>
+            <div class="card-header row align-items-center">
+              <div class="col-md-6">
+                <form method="GET" action="{% url 'clients' client_type %}" class="form-inline d-flex gap-2">
+                  <input class="form-control" type="text" name="company_search_query"
+                         value="{{ company_search_query }}" placeholder="Wyszukaj" />
+                  <input type="hidden" name="individual_search_query" value="{{ individual_search_query }}">
+                  <input type="hidden" name="individual_page" value="{{ individual_client_list.number }}">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i>
+                  </button>
+                  <a href="{% url 'clients' client_type %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                  </a>
+                </form>
+              </div>
+              <div class="col-md-6">
+                <div class="card-tools float-end">
+                  {% if company_client_list.has_next or company_client_list.has_previous %}
+                  <ul class="pagination pagination-sm">
+                    {% if company_client_list.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_client_list.previous_page_number}}&individual_page={{individual_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    {% for page in company_page_range %}
+                    {% if page == company_client_list.number %}
+                    <li class="page-item active"><a class="page-link" href="{% url 'clients' client_type%}?company_page={{page}}&individual_page={{individual_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}">{{ page }}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{% url 'clients' client_type%}?company_page={{page}}&individual_page={{individual_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}">{{ page }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if company_client_list.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_client_list.next_page_number}}&individual_page={{individual_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                  {% endif %}
+                </div>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
@@ -20,10 +62,13 @@
                   <tr>
                     <th>Nazwa firmy</th>
                     <th>NIP</th>
+                    <th>Osoba do kontaktu</th>
                     <th>Email</th>
                     <th>Numer telefonu</th>
                     <th>Adres</th>
                     <th>Region</th>
+                    <th></th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -31,6 +76,7 @@
                   <tr class="align-middle">
                     <td>{{ client.company_name }}</td>
                     <td>{{ client.nip }}</td>
+                    <td>{{ client.contact_person }}</td>
                     <td>{{ client.email }}</td>
                     <td>{{ client.phone }}</td>
                     <td>{{ client.address }}</td>
@@ -62,8 +108,50 @@
         <div class="col-12">
           <!-- /.card -->
           <div class="card mb-4">
-            <div class="card-header">
-              <h3 class="card-title">Klienci prywatni</h3>
+            <div class="card-header row align-items-center">
+              <div class="col-md-6">
+                <form method="GET" action="{% url 'clients' client_type %}" class="form-inline d-flex gap-2">
+                  <input class="form-control" type="text" name="individual_search_query"
+                         value="{{ individual_search_query }}" placeholder="Wyszukaj" />
+                  <input type="hidden" name="company_search_query" value="{{ company_search_query }}">
+                  <input type="hidden" name="company_page" value="{{ company_client_list.number }}">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i>
+                  </button>
+                  <a href="{% url 'clients' client_type %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                  </a>
+                </form>
+              </div>
+              <div class="col-md-6">
+                <div class="card-tools float-end">
+                  {% if individual_client_list.has_next or individual_client_list.has_previous %}
+                  <ul class="pagination pagination-sm">
+                    {% if individual_client_list.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{individual_client_list.previous_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    {% for page in individual_page_range %}
+                    {% if page == individual_client_list.number %}
+                    <li class="page-item active"><a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}">{{ page }}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}">{{ page }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if individual_client_list.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="{% url 'clients' client_type%}?company_page={{company_page}}&individual_page={{individual_client_list.next_page}}&company_search_query={{company_search_query}}&individual_search_query={{individual_search_query}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                  {% endif %}
+                </div>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
@@ -76,6 +164,8 @@
                     <th>Numer telefonu</th>
                     <th>Adres</th>
                     <th>Region</th>
+                    <th></th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>

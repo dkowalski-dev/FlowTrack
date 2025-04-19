@@ -1,8 +1,8 @@
 from django.core.paginator import Paginator
 
-def paginObjects(request, objects, count):
+def paginObjects(request, objects, count, page_key="page"):
     paginator = Paginator(objects, count)
-    page_number = request.GET.get("page", 1)
+    page_number = request.GET.get(page_key, 1)
     objects = paginator.get_page(page_number)
 
     start_page = max(objects.number - 2, 1)
