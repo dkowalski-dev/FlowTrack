@@ -30,6 +30,15 @@ class Offer(models.Model):
     products = models.ManyToManyField(Product, blank=True)
     description = models.TextField(blank=True, default='')
 
+    @property
+    def display_client_name(self):
+        if hasattr(self.client, 'company_name'):
+            return self.client.company_name
+        elif hasattr(self.client, 'name') or hasattr(self.client, 'last_name'):
+            return f"{self.client.name} {self.client.last_name}"
+        else:
+            return "-"
+    
     class Meta:
         ordering = ['-created']
 

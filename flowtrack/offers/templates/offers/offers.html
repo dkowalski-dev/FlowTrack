@@ -6,9 +6,13 @@
   <div class="container-fluid">
     <!--begin::Row-->
     <div class="row">
-      <div class="col-sm-6">
-        Tutaj pojawią się opcje sortowania na bieżąco i opcje usuwania wielu naraz
-      </div>
+      <div class="col-sm-6"><h3 class="mb-0">Lista ofert</h3></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'create-offer'%}">Dodaj ofertę</a></li>
+            <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'clients' 'all'%}">Lista klientów</a></li>
+          </ol>
+        </div>
     </div>
     <!--end::Row-->
   </div>
@@ -23,7 +27,16 @@
           <!-- /.card -->
           <div class="card mb-4">
             <div class="card-header">
-              <h3 class="card-title">Lista ofert</h3>
+              <div class="card-title col-6">
+                <form method="GET" action="{% url 'offers' %}" class="form-inline d-flex gap-2">
+                  <input class="form-control" type="text" name="search_query"
+                    value="{{search_query}}" placeholder="Znajdź ofertę" />
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-search"></i>
+                    </button>
+                    <a href="{% url 'offers' %}" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+                </form>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
@@ -95,6 +108,33 @@
         <!-- /.col -->
       </div>
       <!--end::Row-->
+      <nav aria-label="Page navigation example">
+        {% if offers.has_next or offers.has_previous %}
+        <ul class="pagination justify-content-center">
+          {% if offers.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="{% url 'offers'%}?page={{offers.previous_page_number}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% endif %}
+          {% for page in page_range %}
+          {% if page == offers.number %}
+          <li class="page-item active"><a class="page-link" href="{% url 'offers'%}?page={{page}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}">{{ page }}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="{% url 'offers'%}?page={{page}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}">{{ page }}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if offers.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{% url 'offers'%}?page={{offers.next_page_number}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </nav>
     </div>
     <!--end::Container-->
   </div>

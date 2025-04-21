@@ -6,25 +6,60 @@ from django.contrib import messages
 from usersapp.models import UserSettings
 from flowtrack.utils import paginObjects
 from django.db.models import Q
+from itertools import chain
 
 def offers(request):
     settings = UserSettings.objects.get_or_create(user=request.user)[0]
-    offers = Offer.objects.filter(owner=request.user)
+    search_query = request.GET.get('search_query', '').lower()
     status_filter = request.GET.getlist('status')
+
+    offers_query = Offer.objects.filter(owner=request.user).filter(
+        Q(created__icontains=search_query)|
+        Q(status__name__icontains=search_query) |
+        Q(description__icontains=search_query)
+    )
+
+    offers_clients = Offer.objects.filter(owner=request.user)
+    offers_clients = [
+        offer for offer in offers_clients
+        if search_query in offer.display_client_name.lower()
+        or search_query in offer.client.get_region_display().lower()
+        or search_query in offer.client.email.lower()
+        or search_query in offer.client.phone
+        or search_query in offer.client.address.lower()
+    ]
+
+    offers = list({offer.id: offer for offer in chain(offers_query, offers_clients)}.values())       
+
     if status_filter:
-        offers = offers.filter(status__type__in=status_filter)
+        offers = [
+            offer for offer in offers
+            if offer.status.type in status_filter
+        ]
     else:
-        offers = offers.filter(status__type = 'ongoing')
+        offers = [
+            offer for offer in offers
+            if offer.status.type == 'ongoing'
+        ]
     
+    print(status_filter)
+
     if settings.default_sort == "client":
         offers = sorted(offers, key = lambda offer: offer.client.company_name.lower() if hasattr(offer.client, 'company_name') else offer.client.name.lower())
     elif settings.default_sort == "region":
         offers = sorted(offers, key = lambda offer: offer.client.region )
     else:
-        offers = offers.order_by(settings.default_sort or '-created')
+        pass
+        #offers = offers.order_by(settings.default_sort or '-created')
+
+    offers, page_range = paginObjects(request, offers, 2)
+
     context = {
         "offers": offers,
-        "settings": settings
+        "settings": settings,
+        "search_query": search_query,
+        "page_range": page_range,
+        "status": status_filter,
         }
     return render(request, "offers/offers.html", context)
 

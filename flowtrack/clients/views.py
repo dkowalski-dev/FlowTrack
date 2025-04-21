@@ -3,6 +3,7 @@ from .models import IndividualClient, CompanyClient
 from .forms import IndividualClientForm, CompanyClientForm
 from django.db.models import Q
 from flowtrack.utils import paginObjects
+from itertools import chain
 
 def clients(request, client_type):
     company_search_query = request.GET.get('company_search_query', '')
@@ -13,11 +14,17 @@ def clients(request, client_type):
             Q(email__icontains=company_search_query) |
             Q(phone__icontains=company_search_query) |
             Q(address__icontains=company_search_query) |
-            Q(region__icontains=company_search_query) |
             Q(contact_person__icontains=company_search_query) |
             Q(company_name__icontains=company_search_query) |
             Q(nip__icontains=company_search_query)
         )
+        company_region_client_list = CompanyClient.objects.filter(owner=request.user)
+
+        company_region_client_list = [
+            client for client in company_region_client_list
+            if company_search_query.lower() in client.get_region_display().lower() 
+        ]
+        company_client_list = list({client.id: client for client in chain(company_client_list, company_region_client_list)}.values())
         company_client_list, company_page_range = paginObjects(request, company_client_list, 2, page_key="company_page")
     else:
         company_client_list = []
@@ -28,10 +35,16 @@ def clients(request, client_type):
             Q(email__icontains=individual_search_query) |
             Q(phone__icontains=individual_search_query) |
             Q(address__icontains=individual_search_query) |
-            Q(region__icontains=individual_search_query) |
             Q(name__icontains=individual_search_query) |
             Q(last_name__icontains=individual_search_query) 
         )
+        individual_region_client_list = IndividualClient.objects.filter(owner=request.user)
+
+        individual_region_client_list = [
+            client for client in individual_region_client_list
+            if individual_search_query.lower() in client.get_region_display().lower() 
+        ]
+        individual_client_list = list({client.id: client for client in chain(individual_client_list, individual_region_client_list)}.values())
         individual_client_list, individual_page_range = paginObjects(request, individual_client_list, 2, page_key="individual_page")
     else:
         individual_client_list = []
