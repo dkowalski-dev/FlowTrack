@@ -73,12 +73,14 @@ class UserPaginationForm(ModelForm):
 class UserSortPreferences(ModelForm):
     class Meta:
         model = UserSettings
-        fields = ['offers_sort', 'products_sort', 'categories_sort', 'statuses_sort']
+        fields = ['offers_sort', 'products_sort', 'categories_sort', 'statuses_sort', 'company_client_sort', 'individual_client_sort']
         labels = {
             'offers_sort': "Oferty", 
             'products_sort': "Produkty", 
             'categories_sort': "Kategorie", 
-            'statuses_sort': "Statusy"
+            'statuses_sort': "Statusy",
+            'company_client_sort': "Firmy", 
+            'individual_client_sort': "Klienci indywidualni"
         }
 
     def __init__(self, *args, **kwargs):

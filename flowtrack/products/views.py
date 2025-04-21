@@ -16,12 +16,12 @@ def products(request):
         products = Product.objects.filter(owner=request.user, category_id=category_query).filter(
         Q(serial_number__icontains=search_query) |
         Q(name__icontains=search_query)
-        )
+        ).order_by(settings.products_sort)
     except: 
         products = Product.objects.filter(owner=request.user).filter(
         Q(serial_number__icontains=search_query) |
         Q(name__icontains=search_query)
-        )
+        ).order_by(settings.products_sort)
 
     products, page_range = paginObjects(request, products, settings.produtcs_paginator)
     context = {
@@ -68,7 +68,7 @@ def categories(request):
     settings = UserSettings.objects.get_or_create(user=request.user)[0]
     form = CategoryForm()
     search_query = request.GET.get('search_query', '')
-    categories = Category.objects.filter(owner=request.user, name__icontains=search_query)
+    categories = Category.objects.filter(owner=request.user, name__icontains=search_query).order_by(settings.categories_sort)
     categories, page_range = paginObjects(request, categories, settings.categories_paginator)
 
     if request.method == "POST":

@@ -51,8 +51,8 @@ class UserSettings(models.Model):
     categories_choices = (
         ('name', 'Nazwa'),
         ('-name', 'Nazwa od końca'),
-        ('vat', 'Stawka VAT rosnąco'),
-        ('-vat', 'Stawka VAT malejąco'),
+        ('-vat', 'Stawka VAT rosnąco'),
+        ('vat', 'Stawka VAT malejąco'),
     )
     statuses_choices = (
         ('name', 'Nazwa'),
@@ -60,7 +60,33 @@ class UserSettings(models.Model):
         ('type', 'Rodzaj'),
         ('-type', 'Rodzaj od końca'),
     )
+    individual_client_choices = (
+        ('name', 'Imie'),
+        ('-name', 'Imie od końca'),
+        ('last_name', 'Nazwisko'),
+        ('-last_name', 'Nazwisko od końca'),
+        ('email', 'Email'),
+        ('-email', 'Email od końca'),
+        ('address', 'Adres'),
+        ('-address', 'Adres od końca'),
+        ('region', 'Region'),
+        ('-region', 'Region od końca'),
+    )
+    company_client_choices = (
+        ('contact_person', 'Osoba do kontaktu'),
+        ('-contact_person', 'Osoba do kontaktu od końca'),
+        ('company_name', 'Nazwa firmy'),
+        ('-company_name', 'Nazwa firmy od końca'),
+        ('email', 'Email'),
+        ('-email', 'Email od końca'),
+        ('address', 'Adres'),
+        ('-address', 'Adres od końca'),
+        ('region', 'Region'),
+        ('-region', 'Region od końca'),
+    )
     offers_sort = models.CharField(max_length=20, choices=offers_choices, default='-created')
     products_sort = models.CharField(max_length=20, choices=products_choices, default='name')
     categories_sort = models.CharField(max_length=20, choices=categories_choices, default='name')
     statuses_sort = models.CharField(max_length=20, choices=statuses_choices, default='name')
+    individual_client_sort = models.CharField(max_length=20, choices=individual_client_choices, default='name')
+    company_client_sort = models.CharField(max_length=20, choices=company_client_choices, default='company_name')

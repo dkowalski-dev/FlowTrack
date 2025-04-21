@@ -31,6 +31,12 @@ def clients(request, client_type):
     else:
         company_client_list = []
         company_page_range = 0
+    
+    sort_field = settings.company_client_sort
+    reverse = sort_field.startswith('-')
+    sort_key = sort_field.lstrip('-')
+
+    company_client_list = sorted(company_client_list, key=lambda client: getattr(client, sort_key), reverse=reverse)
 
     if client_type in ['all', 'ind']:
         individual_client_list = IndividualClient.objects.filter(owner=request.user).filter(
@@ -51,6 +57,12 @@ def clients(request, client_type):
     else:
         individual_client_list = []
         individual_page_range = 0
+
+    sort_field = settings.individual_client_sort
+    reverse = sort_field.startswith('-')
+    sort_key = sort_field.lstrip('-')
+
+    individual_client_list = sorted(individual_client_list, key=lambda client: getattr(client, sort_key), reverse=reverse)
 
     context = {
         "individual_client_list": individual_client_list,

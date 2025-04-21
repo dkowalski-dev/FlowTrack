@@ -49,7 +49,11 @@ def offers(request):
     elif settings.offers_sort == "region":
         offers = sorted(offers, key = lambda offer: offer.client.region )
     else:
-        offers = sorted(offers, ket=settings.offers_sort)
+        sort_field = settings.offers_sort
+        reverse = sort_field.startswith('-')
+        sort_key = sort_field.lstrip('-')
+        offers = sorted(offers, key=lambda offer: getattr(offer, sort_key), reverse=reverse)
+
 
     offers, page_range = paginObjects(request, offers, settings.offers_paginator)
 
@@ -168,7 +172,7 @@ def statuses(request):
     search_query = request.GET.get('search_query', '')
     statuses = Status.objects.filter(owner=request.user).filter(
         Q(name__icontains=search_query)
-    )
+    ).order_by(settings.statuses_sort)
     statuses, page_range = paginObjects(request, statuses, settings.statuses_paginator)
 
     form = StatusForm()
