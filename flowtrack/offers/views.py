@@ -44,15 +44,14 @@ def offers(request):
     
     print(status_filter)
 
-    if settings.default_sort == "client":
+    if settings.offers_sort == "client":
         offers = sorted(offers, key = lambda offer: offer.client.company_name.lower() if hasattr(offer.client, 'company_name') else offer.client.name.lower())
-    elif settings.default_sort == "region":
+    elif settings.offers_sort == "region":
         offers = sorted(offers, key = lambda offer: offer.client.region )
     else:
-        pass
-        #offers = offers.order_by(settings.default_sort or '-created')
+        offers = sorted(offers, ket=settings.offers_sort)
 
-    offers, page_range = paginObjects(request, offers, 2)
+    offers, page_range = paginObjects(request, offers, settings.offers_paginator)
 
     context = {
         "offers": offers,
@@ -165,11 +164,12 @@ def delete_product_from_offer(request, pk, pi):
     return redirect('offer', offer.id)
 
 def statuses(request):
+    settings = UserSettings.objects.get_or_create(user=request.user)[0]
     search_query = request.GET.get('search_query', '')
     statuses = Status.objects.filter(owner=request.user).filter(
         Q(name__icontains=search_query)
     )
-    statuses, page_range = paginObjects(request, statuses, 3)
+    statuses, page_range = paginObjects(request, statuses, settings.statuses_paginator)
 
     form = StatusForm()
     if request.method == "POST":

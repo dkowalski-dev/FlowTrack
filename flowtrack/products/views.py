@@ -4,8 +4,10 @@ from .forms import ProductForm, CategoryForm
 from django.contrib import messages
 from django.db.models import Q
 from flowtrack.utils import paginObjects
+from usersapp.models import UserSettings
 
 def products(request):
+    settings = UserSettings.objects.get_or_create(user=request.user)[0]
     search_query = request.GET.get('search_query', '')
     category_query = request.GET.get('category_query', '')
     categories = Category.objects.filter(owner=request.user)
@@ -21,7 +23,7 @@ def products(request):
         Q(name__icontains=search_query)
         )
 
-    products, page_range = paginObjects(request, products, 10)
+    products, page_range = paginObjects(request, products, settings.produtcs_paginator)
     context = {
         "products": products,
         "page_range": page_range,
@@ -63,10 +65,11 @@ def update_product(request, pk):
     return render(request, "form_template.html", context)
 
 def categories(request):
+    settings = UserSettings.objects.get_or_create(user=request.user)[0]
     form = CategoryForm()
     search_query = request.GET.get('search_query', '')
     categories = Category.objects.filter(owner=request.user, name__icontains=search_query)
-    categories, page_range = paginObjects(request, categories, 10)
+    categories, page_range = paginObjects(request, categories, settings.categories_paginator)
 
     if request.method == "POST":
         form = CategoryForm(request.POST)

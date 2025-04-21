@@ -55,12 +55,13 @@ class UserPreferencesForm(ModelForm):
 class UserPaginationForm(ModelForm):
     class Meta:
         model = UserSettings
-        fields = ['offers_paginator', 'produtcs_paginator', 'categories_paginator', 'statuses_paginator']
+        fields = ['offers_paginator', 'produtcs_paginator', 'categories_paginator', 'statuses_paginator', 'clients_paginator']
         labels = {
             'offers_paginator': "Ilość ofert na stronie", 
             'produtcs_paginator': "Ilość produktów na stronie", 
             'categories_paginator': "Ilość kategorii na stronie", 
-            'statuses_paginator': "Ilość statusów na stronie"
+            'statuses_paginator': "Ilość statusów na stronie",
+            'clients_paginator': "Ilość klientów na stronie"
         }
 
     def __init__(self, *args, **kwargs):

@@ -25,6 +25,7 @@ class UserSettings(models.Model):
     produtcs_paginator = models.IntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(100)])
     categories_paginator = models.IntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(100)])
     statuses_paginator = models.IntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    clients_paginator = models.IntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(100)])
     
     #Sortowanie na stronach
     offers_choices = (

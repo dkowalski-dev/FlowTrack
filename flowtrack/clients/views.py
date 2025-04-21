@@ -4,8 +4,10 @@ from .forms import IndividualClientForm, CompanyClientForm
 from django.db.models import Q
 from flowtrack.utils import paginObjects
 from itertools import chain
+from usersapp.models import UserSettings
 
 def clients(request, client_type):
+    settings = UserSettings.objects.get_or_create(user=request.user)[0]
     company_search_query = request.GET.get('company_search_query', '')
     individual_search_query = request.GET.get('individual_search_query', '')
 
@@ -25,7 +27,7 @@ def clients(request, client_type):
             if company_search_query.lower() in client.get_region_display().lower() 
         ]
         company_client_list = list({client.id: client for client in chain(company_client_list, company_region_client_list)}.values())
-        company_client_list, company_page_range = paginObjects(request, company_client_list, 2, page_key="company_page")
+        company_client_list, company_page_range = paginObjects(request, company_client_list, settings.clients_paginator, page_key="company_page")
     else:
         company_client_list = []
         company_page_range = 0
@@ -45,7 +47,7 @@ def clients(request, client_type):
             if individual_search_query.lower() in client.get_region_display().lower() 
         ]
         individual_client_list = list({client.id: client for client in chain(individual_client_list, individual_region_client_list)}.values())
-        individual_client_list, individual_page_range = paginObjects(request, individual_client_list, 2, page_key="individual_page")
+        individual_client_list, individual_page_range = paginObjects(request, individual_client_list, settings.clients_paginator, page_key="individual_page")
     else:
         individual_client_list = []
         individual_page_range = 0
