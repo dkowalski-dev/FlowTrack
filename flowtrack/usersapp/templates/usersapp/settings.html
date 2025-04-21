@@ -3,44 +3,235 @@
 {% block title %}Ustawienia{% endblock %}
 
 {% block main %}
-<div class="d-flex justify-content-center">
-    <div class="col-md-6">
-        <div class="card card-primary card-outline mb-4">
-            <div class="card-header"><div class="card-title">{{title}}</div></div>
-            <form method="POST">
-                {% csrf_token %}
-                <div class="card-body">
-                    {% for field in infoform %}
-                    <div class="mb-3">
-                        {{ field.label }}
-                        {{ field }}
-                        {{ field.errors }}
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Zatwierdź</button>
-                </div>
-            </form>
+<div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-sm-6"><h3 class="mb-0">Edytuj ustawienia</h3></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'offers' %}">Oferty</a></li>
+          </ol>
         </div>
-        <div class="card card-primary card-outline mb-4">
-            <div class="card-header"><div class="card-title">{{title}}</div></div>
-            <form method="POST">
-                {% csrf_token %}
-                <div class="card-body">
-                    {% for field in preferencesform %}
-                    <div class="mb-3">
-                        {{ field.label }}
-                        {{ field }}
-                        {{ field.errors }}
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Zatwierdź</button>
-                </div>
-            </form>
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <div class="app-content">
+    <div class="row">
+      <!-- Pierwsza kolumna -->
+      <div class="col-md-6">
+        {% if edit == 'infoform' %}
+        <div class="card card-outline mb-4">
+          <form method="POST" action="{% url 'settings' %}">
+            <input type="hidden" name="edit" value="infoform">
+            {% csrf_token %}
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title">Twoje dane</div>
+          </div>
+          <div class="card-body">
+            {% for field in infoform %}
+                {{ field.label }}
+                {{ field }}
+            {% endfor %}
+            <br>
+            <button type="submit" class="btn btn-primary" name="description_form">Zatwierdź</button>
+            <a class="btn btn-danger" href="{% url 'settings' %}">Anuluj</a>
+          </div>
+          </form>
         </div>
+        {% else %}
+        <div class="card card-outline mb-4">
+          <!--begin::Header-->
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title col-6">Twoje dane</div>
+            <div class="text-muted col-6 text-end"><a class="bi bi-pencil" href="{% url 'settings'%}?edit=infoform"></a></div>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+                {% for field in infoform %}
+                <tr>
+                    <td>
+                        {{field.label}}
+                    </td>
+                    <td>
+                        {{field.value}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+          </div>
+        </div>
+        {% endif %}
+        {% if edit == 'userpaginationform' %}
+        <div class="card card-outline mb-4">
+          <form method="POST" action="{% url 'settings' %}">
+            <input type="hidden" name="edit" value="userpaginationform">
+            {% csrf_token %}
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title">ilość elementów na stronie</div>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+            {% for field in userpaginationform %}
+                <tr>
+                    <td class="col-10">
+                        {{field.label}}
+                    </td>
+                    <td class="col-2">
+                        {{field}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <button type="submit" class="btn btn-primary" name="description_form">Zatwierdź</button>
+            <a class="btn btn-danger" href="{% url 'settings' %}">Anuluj</a>
+          </div>
+          </form>
+        </div>
+        {% else %}
+        <div class="card card-outline mb-4">
+          <!--begin::Header-->
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title col-6">Ilość elementów na stronie</div>
+            <div class="text-muted col-6 text-end"><a class="bi bi-pencil" href="{% url 'settings'%}?edit=userpaginationform"></a></div>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+                {% for field in userpaginationform %}
+                <tr>
+                    <td>
+                        {{field.label}}
+                    </td>
+                    <td>
+                        {{field.value}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-md-6">
+        {% if edit == 'preferencesform' %}
+        <div class="card card-outline mb-4">
+          <form method="POST" action="{% url 'settings' %}">
+            <input type="hidden" name="edit" value="preferencesform">
+            {% csrf_token %}
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title">Wyświetlanie pozycji na liście ofert</div>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+                {% for field in preferencesform %}
+                <tr>
+                    <td>
+                        {{ field.label }}
+                    </td>
+                    <td class="text-center">
+                        {{ field }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <button type="submit" class="btn btn-primary" name="description_form">Zatwierdź</button>
+            <a class="btn btn-danger" href="{% url 'settings' %}">Anuluj</a>
+          </div>
+          </form>
+        </div>
+        {% else %}
+        <div class="card card-outline mb-4">
+          <!--begin::Header-->
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title col-6">Wyświetlanie pozycji na liście ofert</div>
+            <div class="text-muted col-6 text-end"><a class="bi bi-pencil" href="{% url 'settings'%}?edit=preferencesform"></a></div>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+                {% for field in preferencesform %}
+                <tr>
+                    <td>
+                        {{field.label}}
+                    </td>
+                    <td class="text-center">
+                        {% if field.name == "default_sort" %}
+                            {{ settings.get_default_sort_display }}
+                        {% else %}
+                            {% if field.value %}
+                            <i class="bi bi-check-lg text-success"></i>
+                            {% else %}
+                            <i class="bi bi-x-lg text-danger"></i>
+                            {% endif %}
+                        {% endif%}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+          </div>
+        </div>
+        {% endif %}
+        {% if edit == 'usersortpreferences' %}
+        <div class="card card-outline mb-4">
+          <form method="POST" action="{% url 'settings' %}">
+            <input type="hidden" name="edit" value="usersortpreferences">
+            {% csrf_token %}
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title">Opcje sortowania na stronach</div>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+                {% for field in usersortpreferences %}
+                <tr>
+                    <td>
+                        {{ field.label }}
+                    </td>
+                    <td class="text-center">
+                        {{ field }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <button type="submit" class="btn btn-primary" name="description_form">Zatwierdź</button>
+            <a class="btn btn-danger" href="{% url 'settings' %}">Anuluj</a>
+          </div>
+          </form>
+        </div>
+        {% else %}
+        <div class="card card-outline mb-4">
+          <!--begin::Header-->
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-title col-6">Opcje sortowania na stronach</div>
+            <div class="text-muted col-6 text-end"><a class="bi bi-pencil" href="{% url 'settings'%}?edit=usersortpreferences"></a></div>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td>Oferty</td>
+                    <td>{{settings.get_offers_sort_display}}</td>
+                </tr>
+                <tr>
+                    <td>Produkty</td>
+                    <td>{{settings.get_products_sort_display}}</td>
+                </tr>
+                <tr>
+                    <td>Kategorie</td>
+                    <td>{{settings.get_categories_sort_display}}</td>
+                </tr>
+                <tr>
+                    <td>Statusy</td>
+                    <td>{{settings.get_statuses_sort_display}}</td>
+                </tr>
+            </table>
+          </div>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}

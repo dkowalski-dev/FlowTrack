@@ -31,7 +31,7 @@ class UserPreferencesForm(ModelForm):
     class Meta:
         model = UserSettings
         fields = ['show_created', 'show_client', 'show_description', 'show_client_address', 'show_client_region',
-                  'show_client_email', 'show_client_phone', 'show_status',  'default_sort']
+                  'show_client_email', 'show_client_phone', 'show_status']
         labels = {
             'show_created': "Wyświetlaj datę", 
             'show_client': "Wyświetl nazwę klienta", 
@@ -41,7 +41,6 @@ class UserPreferencesForm(ModelForm):
             'show_client_region': "Wyświetlaj region", 
             'show_status': "Pokaż status", 
             'show_description': "Pokaż opis", 
-            'default_sort': "Domyślne sortowanie"
         }
 
     def __init__(self, *args, **kwargs):
@@ -52,3 +51,37 @@ class UserPreferencesForm(ModelForm):
                 field.widget.attrs.update({"class": "form-control"})
             else:
                 field.widget.attrs.update({"class": "form-check-input"})
+
+class UserPaginationForm(ModelForm):
+    class Meta:
+        model = UserSettings
+        fields = ['offers_paginator', 'produtcs_paginator', 'categories_paginator', 'statuses_paginator']
+        labels = {
+            'offers_paginator': "Ilość ofert na stronie", 
+            'produtcs_paginator': "Ilość produktów na stronie", 
+            'categories_paginator': "Ilość kategorii na stronie", 
+            'statuses_paginator': "Ilość statusów na stronie"
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({"class": "form-control"})
+
+class UserSortPreferences(ModelForm):
+    class Meta:
+        model = UserSettings
+        fields = ['offers_sort', 'products_sort', 'categories_sort', 'statuses_sort']
+        labels = {
+            'offers_sort': "Oferty", 
+            'products_sort': "Produkty", 
+            'categories_sort': "Kategorie", 
+            'statuses_sort': "Statusy"
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({"class": "form-control"})

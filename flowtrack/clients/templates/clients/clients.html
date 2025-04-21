@@ -30,6 +30,7 @@
           <div class="card mb-4">
             <div class="card-header row align-items-center">
               <div class="col-md-6">
+                <p>Firmy</p>
                 <form method="GET" action="{% url 'clients' client_type %}" class="form-inline d-flex gap-2">
                   <input class="form-control" type="text" name="company_search_query"
                          value="{{ company_search_query }}" placeholder="Wyszukaj" />
@@ -74,9 +75,9 @@
               </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body p-0">
-              {% if company_client_list %}
-              <table class="table table-sm">
+              <div class="card-body p-0">
+                {% if company_client_list %}
+                <table class="table table-sm">
                 <thead>
                   <tr >
                     <th>Nazwa firmy</th>
@@ -128,6 +129,7 @@
           <div class="card mb-4">
             <div class="card-header row align-items-center">
               <div class="col-md-6">
+                <p>Osoby</p>
                 <form method="GET" action="{% url 'clients' client_type %}" class="form-inline d-flex gap-2">
                   <input class="form-control" type="text" name="individual_search_query"
                          value="{{ individual_search_query }}" placeholder="Wyszukaj" />
