@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Offer, Status, Note
-from products.models import Product
+from products.models import Product, Category
 from .forms import StatusForm, OfferForm, NoteForm, OfferProductsForm
 from django.contrib import messages
 from usersapp.models import UserSettings
@@ -141,20 +141,42 @@ def offer(request, pk):
 
 def add_product_to_offer(request, pk):
     offer = Offer.objects.get(id=pk)
-    form = OfferProductsForm(user=request.user, offer=offer)
+    settings = UserSettings.objects.get_or_create(user=request.user)[0]
+    search_query = request.GET.get('search_query', '')
+    category_query = request.GET.get('category_query', '')
+    categories = Category.objects.filter(owner=request.user)
+
+    try: 
+        products = Product.objects.filter(owner=request.user, category_id=category_query).exclude(
+            id__in=offer.products.values_list('id', flat=True)).filter(
+        Q(serial_number__icontains=search_query) |
+        Q(name__icontains=search_query)
+        ).order_by(settings.products_sort)
+    except: 
+        products = Product.objects.filter(owner=request.user).exclude(
+            id__in=offer.products.values_list('id', flat=True)).filter(
+        Q(serial_number__icontains=search_query) |
+        Q(name__icontains=search_query)
+        ).order_by(settings.products_sort)
+
+    products, page_range = paginObjects(request, products, settings.produtcs_paginator)
+
+    if request.method == "POST":
+        selected_ids = request.POST.getlist('selected_ids')
+        products_add = Product.objects.filter(owner=request.user, id__in=selected_ids)
+        offer.products.add(*products_add)
+        return redirect('offer', offer.id)
+    
     context = {
-        "form": form,
-        "title": "Zaznacz produkty które chcesz dodać",
+        "products": products,
+        "offer": offer,
+        "search_query": search_query,
+        "category_query": category_query,
+        "categories": categories,
+        "page_range": page_range,
     }
     
-    if request.method == "POST":
-        form = OfferProductsForm(request.POST, user=request.user, offer=offer)
-        if form.is_valid():
-            products = form.cleaned_data['products']
-            for product in products:
-                offer.products.add(product)
-            return redirect('offer', pk)
-    return render(request,"form_template.html", context)
+    return render(request,"offers/add_products.html", context)
 
 def delete_product_from_offer(request, pk, pi):
     print("Przekierowuje")

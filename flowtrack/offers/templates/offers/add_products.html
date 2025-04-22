@@ -1,0 +1,139 @@
+{% extends "main.html" %}
+{% block title %}Lista produktów{% endblock title %}
+{% block main %}
+ <div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-sm-6"><h3 class="mb-0">Lista produktów</h3></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a class="btn btn-danger" href="{% url 'offer' offer.id %}">Anuluj</a></li>
+          </ol>
+        </div>
+      </div>
+      <!--end::Row-->
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::App Content Header-->
+  <!--begin::App Content-->
+  <div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+      <!--begin::Row-->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <div class="card-title col-6">
+                <form method="GET" action="{% url 'add-product-to-offer' offer.id%}" class="form-inline d-flex gap-2">
+                  <input class="form-control" type="text" name="search_query"
+                    value="{{search_query}}" placeholder="Wpisz nazwę lub kod produktu" />
+                    <select name="category_query" class="form-control">
+                      <option value="">Wyświetlaj z danej kategorii</option>
+                      {% for category in categories %}
+                      <option value="{{category.id}}" {% if category.id|stringformat:"s" == category_query %} selected {% endif %}>{{category}}</option>
+                      {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-search"></i>
+                    </button>
+                    <a href="{% url 'add-product-to-offer' offer.id%}" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+                </form>
+              </div>
+              
+              <div class="text-muted col-6 text-end">
+                <form action="{% url 'add-product-to-offer' offer.id%}" method="POST">
+                  {% csrf_token %}
+                {% if products %}<button class="btn btn-primary" type="submit">Dodaj zaznaczone</button>{% endif %}
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              {% if products %}
+              <table class="table table-sm">
+                <input type="hidden" name="model" value="product">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Numer/Kod produktu</th>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Kategoria</th>
+                    <th>Cena zakupu</th>
+                    <th>Cena sprzedaży</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr class="align-middle selectable-row">
+                            <td><input type="checkbox" class="form-check-input" name="selected_ids" value="{{ product.id }}"></td>
+                            <td>{{product.serial_number}}</td>
+                            <td>{{product.name}}</td>
+                            <td class="wrap-text">{{product.description}}</td>
+                            <td>{{product.category}}</td>
+                            <td>{{product.purchase_formatted}} zł</td>
+                            <td>{{product.sale_formatted}} zł</td>
+                            <td><a class="btn btn-primary btn-sm" href="{% url 'update-product' product.id %}">Edytuj</a></td>
+                        </tr>
+                    {% endfor%}
+                </tbody>
+              </table>
+            </div>
+            {% endif %}
+        </div>
+        <!-- /.col -->
+      </form>
+      </div>
+      <!--end::Row-->
+    </div>
+    <nav aria-label="Page navigation example">
+      {% if products.has_next or products.has_previous %}
+      <ul class="pagination justify-content-center">
+        {% if products.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="{% url 'add-product-to-offer' offer.id%}?page={{products.previous_page_number}}&search_query={{search_query}}&category_query={{category_query}}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        {% endif %}
+        {% for page in page_range %}
+        {% if page == products.number %}
+        <li class="page-item active"><a class="page-link" href="{% url 'add-product-to-offer' offer.id%}?page={{page}}&search_query={{search_query}}&category_query={{category_query}}">{{ page }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="{% url 'add-product-to-offer' offer.id%}?page={{page}}&search_query={{search_query}}&category_query={{category_query}}">{{ page }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if products.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="{% url 'add-product-to-offer' offer.id%}?page={{products.next_page_number}}&search_query={{search_query}}&category_query={{category_query}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+      {% endif %}
+    </nav>
+    <!--end::Container-->
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const rows = document.querySelectorAll("table tbody tr");
+  
+      rows.forEach(row => {
+        row.addEventListener("click", function (event) {
+          // ignoruj kliknięcia w przyciski/ikony/linki
+          if (["BUTTON", "A", "INPUT"].includes(event.target.tagName)) return;
+  
+          const checkbox = this.querySelector("input[type='checkbox']");
+          if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+          }
+        });
+      });
+    });
+  </script>
+{% endblock main %}

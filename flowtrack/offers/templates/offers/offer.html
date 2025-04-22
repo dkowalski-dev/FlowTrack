@@ -37,6 +37,7 @@
             {{offer_form.description}}
           </p>
           <button type="submit" class="btn btn-primary" name="description_form">Zatwierdź</button>
+          <a class="btn btn-danger" href="{% url 'offer' offer.id %}">Anuluj</a>
         </div>
         </form>
       </div>
@@ -74,7 +75,8 @@
                 <form method = "POST">
                   {% csrf_token %}
                 <td>{{ edit_note_form.content }}</td>
-                <td><button type="submit" class="btn btn-primary" name="edit_note_form">Zatwierdź</button></td>
+                <td><button type="submit" class="btn btn-primary" name="edit_note_form">Zatwierdź</button>
+                  <a class="btn btn-danger" href="{% url 'offer' offer.id %}">Anuluj</a></td>
                 </form>
                 {% else %}
                 <td>{{ note.content }}</td>
@@ -117,12 +119,23 @@
     <!-- Druga kolumna -->
     <div class="col-md-6">
       {% if client_form %}
-      <form method="POST">
-        {% csrf_token %}
-          {{client_form.client}}
-          <input type="hidden" name="status" value="{{ offer.status.id }}" />
-        <button type="submit" class="btn btn-primary" name="client_form">Zapisz</button>
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title"><strong>Lista klientów</strong></h3>
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+        <div class="card-body p-0">
+            <input type="hidden" name="status" value="{{ offer.status.id }}" />
+            {{client_form.client}}
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary" name="client_form">Zapisz</button>
+          <a class="btn btn-danger" href="{% url 'offer' offer.id %}">Anuluj</a>
+        </div>
       </form>
+        <!-- /.card-body -->
+      </div>
       {% else %}
       <div class="small-box text-bg-warning">
         <div class="inner">
