@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Offer, Status, Note
+from .models import Offer, Status, Note, OfferProduct
 from products.models import Product, Category
 from .forms import StatusForm, OfferForm, NoteForm, OfferProductsForm
 from django.contrib import messages
@@ -87,7 +87,7 @@ def create_offer(request):
 def offer(request, pk):
     new_note_form = NoteForm()
     offer = Offer.objects.filter(owner=request.user, id=pk).first()
-    products = offer.products.all()
+    products = OfferProduct.objects.filter(offer=offer)
     notes = Note.objects.filter(offer=offer.id)
 
     if not offer:
@@ -164,7 +164,11 @@ def add_product_to_offer(request, pk):
     if request.method == "POST":
         selected_ids = request.POST.getlist('selected_ids')
         products_add = Product.objects.filter(owner=request.user, id__in=selected_ids)
-        offer.products.add(*products_add)
+        offer_products = [
+            OfferProduct(offer=offer, product=product, offer_price=product.sale_price)
+            for product in products_add
+        ]
+        OfferProduct.objects.bulk_create(offer_products)
         return redirect('offer', offer.id)
     
     context = {
