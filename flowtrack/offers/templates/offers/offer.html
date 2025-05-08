@@ -69,21 +69,34 @@
         <div class="card-body p-0">
           <table class="table table-sm">
             <tbody>
-            {% for note in notes %}
-              <tr class="align-middle">
-                {% if edit_note_form and note.id == edit_note_form.instance.id %}
-                <form method = "POST">
-                  {% csrf_token %}
-                <td>{{ edit_note_form.content }}</td>
-                <td><button type="submit" class="btn btn-primary" name="edit_note_form">Zatwierdź</button>
-                  <a class="btn btn-danger" href="{% url 'offer' offer.id %}">Anuluj</a></td>
-                </form>
-                {% else %}
-                <td>{{ note.content }}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('note', '{{ note.id }}')"> Usuń</button></td>
-                <td><a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=note&note_id={{note.id}}">Edytuj</a></td>
-                {% endif %}
-              </tr>
+              {% for note in notes %}
+                <tr class="align-middle">
+                  {% if edit_note_form and note.id == edit_note_form.instance.id %}
+                    <form method="POST">
+                      {% csrf_token %}
+                      <td colspan="4">
+                        <div class="row g-2">
+                          <div class="col-9">
+                            {{ edit_note_form.content }}
+                          </div>
+                          <div class="col-3 d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-primary btn-sm me-1" name="edit_note_form">Zatwierdź</button>
+                            <a class="btn btn-danger btn-sm" href="{% url 'offer' offer.id %}">Anuluj</a>
+                          </div>
+                        </div>
+                      </td>
+                    </form>
+                  {% else %}
+                    <td class="col-2">{{ note.created|date:"d-m H:i" }}</td>
+                    <td class="col-8 text-break">{{ note.content }}</td>
+                    <td class="col-1">
+                      <button class="btn btn-danger btn-sm" onclick="confirmDelete('note', '{{ note.id }}')">Usuń</button>
+                    </td>
+                    <td class="col-1">
+                      <a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=note&note_id={{note.id}}">Edytuj</a>
+                    </td>
+                  {% endif %}
+                </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -175,9 +188,16 @@
               <p>Adres: {{ offer.client.address }}</p>
             </div>
             <div class="col-md-6">
-              <p>Region: {% if client.region == 'brak' %} - {% else %}{{ client.get_region_display }} {% endif %}</p>
+              <p>Region: {% if offer.client.region == 'brak' %} - {% else %}{{ offer.client.get_region_display }}{% endif %}</p>
             </div>
           </div>
+          {% if offer.client_type.model == "companyclient" %}
+          <div class="row">
+            <div class="col-md-6">
+              <p>Osoba do kontaktu: {{ offer.client.contact_person }}</p>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
       {% endif %}
@@ -192,22 +212,24 @@
           <table class="table table-sm">
             <thead>
               <tr>
-                <th>Nazwa</th>
-                <th>Cena zakupu</th>
-                <th>Cena dla oferty</th>
-                <th>Ilośc</th>
-                <th></th>
+                <th style="width: 45%">Nazwa</th>
+                <th style="width: 15%" class="text-end">Cena zakupu</th>
+                <th style="width: 15%" class="text-end">Cena dla oferty</th>
+                <th style="width: 10%" class="text-end">Ilość</th>
+                <th style="width: 15%"></th>
               </tr>
             </thead>
             <tbody>
-            {% for product in products %}
-              <tr class="align-middle">
-                <td>{{ product.product.name }}</td>
-                <td>{{ product.product.purchase_price }}</td>
-                <td>{{ product.offer_price }}</td>
-                <td>{{ product.quantity }}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="confirmDeleteProductFromOffer('{{offer.id}}', '{{product.product.id}}')"> Usuń z oferty</button></td>
-              </tr>
+              {% for product in products %}
+                <tr class="align-middle">
+                  <td class="text-break">{{ product.product.name }}</td>
+                  <td class="text-end">{{ product.product.purchase_price }}</td>
+                  <td class="text-end">{{ product.offer_price }}</td>
+                  <td class="text-end">{{ product.quantity }}</td>
+                  <td class="text-end">
+                    <button class="btn btn-danger btn-sm" onclick="confirmDeleteProductFromOffer('{{offer.id}}', '{{product.product.id}}')">Usuń z oferty</button>
+                  </td>
+                </tr>
               {% endfor %}
             </tbody>
           </table>

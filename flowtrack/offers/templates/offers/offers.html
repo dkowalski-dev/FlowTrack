@@ -73,7 +73,7 @@
                 {% for offer in offers %}
                 <tr class="align-middle" onclick="window.location='{% url 'offer' offer.id %}';" style="cursor: pointer;">
                     {% if settings.show_created %}
-                      <td>{{ offer.created }}</td>
+                      <td>{{ offer.created|date:"d-m-Y" }}</td>
                     {% endif %}
                     {% if settings.show_client %}
                       <td>{{ offer.client }}</td>
@@ -85,7 +85,7 @@
                      <td>{{ offer.client.address}}</td>
                     {% endif %}
                     {% if settings.show_client_region %}
-                      <td>{{ offer.client.get_region_display }}</td>
+                      <td>{% if offer.client.region == 'brak' %} - {% else %}{{ offer.client.get_region_display }}{% endif %}</td>
                     {% endif %}
                     {% if settings.show_client_email %}
                       <td>{{ offer.client.email}}</td>
