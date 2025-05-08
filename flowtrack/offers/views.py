@@ -145,20 +145,17 @@ def add_product_to_offer(request, pk):
     search_query = request.GET.get('search_query', '')
     category_query = request.GET.get('category_query', '')
     categories = Category.objects.filter(owner=request.user)
+    offer_products = OfferProduct.objects.filter(offer=offer)
 
-    try: 
-        products = Product.objects.filter(owner=request.user, category_id=category_query).exclude(
-            id__in=offer.products.values_list('id', flat=True)).filter(
+    products = Product.objects.filter(owner=request.user)
+    if category_query:
+        products = products.filter(category_id=category_query)
+    products = products.exclude(id__in=offer_products.values_list('product_id', flat=True))
+    products = products.filter(
         Q(serial_number__icontains=search_query) |
         Q(name__icontains=search_query)
         ).order_by(settings.products_sort)
-    except: 
-        products = Product.objects.filter(owner=request.user).exclude(
-            id__in=offer.products.values_list('id', flat=True)).filter(
-        Q(serial_number__icontains=search_query) |
-        Q(name__icontains=search_query)
-        ).order_by(settings.products_sort)
-
+    
     products, page_range = paginObjects(request, products, settings.produtcs_paginator)
 
     if request.method == "POST":

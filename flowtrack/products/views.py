@@ -12,13 +12,10 @@ def products(request):
     category_query = request.GET.get('category_query', '')
     categories = Category.objects.filter(owner=request.user)
 
-    try: 
-        products = Product.objects.filter(owner=request.user, category_id=category_query).filter(
-        Q(serial_number__icontains=search_query) |
-        Q(name__icontains=search_query)
-        ).order_by(settings.products_sort)
-    except: 
-        products = Product.objects.filter(owner=request.user).filter(
+    products = Product.objects.filter(owner=request.user)
+    if category_query:
+        products = products.filter(category_id=category_query)
+    products = products.filter(
         Q(serial_number__icontains=search_query) |
         Q(name__icontains=search_query)
         ).order_by(settings.products_sort)
