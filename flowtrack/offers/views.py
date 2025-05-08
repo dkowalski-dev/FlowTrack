@@ -180,14 +180,13 @@ def add_product_to_offer(request, pk):
     return render(request,"offers/add_products.html", context)
 
 def delete_product_from_offer(request, pk, pi):
-    print("Przekierowuje")
-    offer = Offer.objects.filter(id=pk).first()
+    offer = Offer.objects.filter(owner=request.user, id=pk).first()
     if offer == None: return redirect('offers')
 
-    product = Product.objects.filter(id=pi).first()
+    product = Product.objects.filter(owner=request.user, id=pi).first()
     if product == None: return redirect('offer', pk)
 
-    offer.products.remove(product)
+    OfferProduct.objects.filter(offer=offer, product=product).delete()
     return redirect('offer', offer.id)
 
 def statuses(request):
