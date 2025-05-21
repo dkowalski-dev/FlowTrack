@@ -1,6 +1,6 @@
 from django.forms import ModelForm, ChoiceField, ModelMultipleChoiceField, CheckboxSelectMultiple
 from django.contrib.contenttypes.models import ContentType
-from .models import Status, Offer, Note
+from .models import Status, Offer, Note, OfferProduct
 from products.models import Product
 from clients.models import IndividualClient, CompanyClient
 
@@ -68,31 +68,22 @@ class OfferForm(ModelForm):
             offer.save()
         return offer
 
-class OfferProductsForm(ModelForm):
-    class Meta:
-        model = Product
-        fields = ['products']
-        
-    products = ModelMultipleChoiceField(
-        queryset = Product.objects.none(),
-        widget = CheckboxSelectMultiple(
-            attrs = {
-                "class": "form-check-input"
-            }
-        )
-    )
-
-    def __init__(self, *args, user=None, offer=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        products_list = Product.objects.filter(owner=user)
-        products = offer.products.all()
-        self.fields['products'].queryset = products_list.exclude(id__in=products.values_list('id', flat=True))
-
 class NoteForm(ModelForm):
     class Meta:
         model = Note
         fields = ['content']
     
+    def __init__(self, *arg, **kwargs):
+        super().__init__(*arg, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({"class": "form-control"})
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = OfferProduct
+        fields = ['offer_price', 'quantity']
+
     def __init__(self, *arg, **kwargs):
         super().__init__(*arg, **kwargs)
 

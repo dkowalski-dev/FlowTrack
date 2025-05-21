@@ -221,15 +221,32 @@
             </thead>
             <tbody>
               {% for product in products %}
+              {% if product_form and product.id == product_form.instance.id %}
+                <form method="POST">
+                  {% csrf_token %}
+                  <tr class="align-middle">
+                    <td class="text-break">{{ product.product.name }}</td>
+                    <td class="text-end">{{ product.product.purchase_price }}</td>          
+                    <td class="text-end">{{ product_form.offer_price }}</td>
+                    <td class="text-end">{{ product_form.quantity }}</td>
+                    <td class="text-end">
+                      <button type="submit" class="btn btn-primary btn-sm me-1" name="product_form">Zatwierdź</button>
+                      <a class="btn btn-danger btn-sm" href="{% url 'offer' offer.id %}">Anuluj</a>
+                    </td>
+                  </tr>
+                  </form>
+              {% else %}
                 <tr class="align-middle">
                   <td class="text-break">{{ product.product.name }}</td>
-                  <td class="text-end">{{ product.product.purchase_price }}</td>
+                  <td class="text-end">{{ product.product.purchase_price }}</td>          
                   <td class="text-end">{{ product.offer_price }}</td>
                   <td class="text-end">{{ product.quantity }}</td>
                   <td class="text-end">
+                    <a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=product&product_id={{product.id}}">Edytuj</a>
                     <button class="btn btn-danger btn-sm" onclick="confirmDeleteProductFromOffer('{{offer.id}}', '{{product.product.id}}')">Usuń z oferty</button>
                   </td>
                 </tr>
+              {% endif %}
               {% endfor %}
             </tbody>
           </table>

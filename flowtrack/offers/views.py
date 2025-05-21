@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Offer, Status, Note, OfferProduct
 from products.models import Product, Category
-from .forms import StatusForm, OfferForm, NoteForm, OfferProductsForm
+from .forms import StatusForm, OfferForm, NoteForm, ProductForm
 from django.contrib import messages
 from usersapp.models import UserSettings
 from flowtrack.utils import paginObjects
@@ -122,6 +122,17 @@ def offer(request, pk):
             if client_form.is_valid():
                 client_form.save()
                 return redirect('offer', offer.id) 
+            
+        if "product_form" in request.POST:
+            product = OfferProduct.objects.filter(id=request.GET.get('product_id')).first()
+            if product:
+                product_form = ProductForm(request.POST, instance=product)
+                if product_form.is_valid():
+                    product_form.save()
+                    return redirect('offer', offer.id)
+            
+
+
     context = {
         "offer": offer,
         "new_note_form": new_note_form,
@@ -136,6 +147,9 @@ def offer(request, pk):
             context['edit_note_form'] = NoteForm(instance=note)
     if request.GET.get('edit') == 'client':
         context['client_form'] = OfferForm(instance=offer, user=request.user)
+    if request.GET.get('edit') == 'product':
+        product = OfferProduct.objects.filter(id=request.GET.get('product_id')).first()
+        context['product_form'] = ProductForm(instance=product)
     
     return render(request, "offers/offer.html", context)
 
