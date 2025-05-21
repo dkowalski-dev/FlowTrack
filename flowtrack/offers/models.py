@@ -27,7 +27,7 @@ class Offer(models.Model):
     client_id = models.UUIDField(null=True)
     client = GenericForeignKey('client_type', 'client_id')
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True)
-    #products = models.ManyToManyField(Product, blank=True)
+    products = models.ManyToManyField(Product, through="OfferProduct", blank=True)
     description = models.TextField(blank=True, default='')
 
     @property
