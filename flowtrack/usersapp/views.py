@@ -42,3 +42,6 @@ def settings(request):
         "settings": settings,
     }
     return render(request, "usersapp/settings.html", context)
+
+def index(request):
+    return render(request, "index.html")

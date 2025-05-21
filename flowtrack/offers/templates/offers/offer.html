@@ -230,8 +230,10 @@
                     <td class="text-end">{{ product_form.offer_price }}</td>
                     <td class="text-end">{{ product_form.quantity }}</td>
                     <td class="text-end">
-                      <button type="submit" class="btn btn-primary btn-sm me-1" name="product_form">Zatwierdź</button>
-                      <a class="btn btn-danger btn-sm" href="{% url 'offer' offer.id %}">Anuluj</a>
+                      <div class="d-flex justify-content-end gap-1">
+                        <button type="submit" class="btn btn-primary btn-sm" name="product_form">Zatwierdź</button>
+                        <a class="btn btn-danger btn-sm" href="{% url 'offer' offer.id %}">Anuluj</a>
+                      </div>
                     </td>
                   </tr>
                   </form>
@@ -242,8 +244,10 @@
                   <td class="text-end">{{ product.offer_price }}</td>
                   <td class="text-end">{{ product.quantity }}</td>
                   <td class="text-end">
-                    <a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=product&product_id={{product.id}}">Edytuj</a>
-                    <button class="btn btn-danger btn-sm" onclick="confirmDeleteProductFromOffer('{{offer.id}}', '{{product.product.id}}')">Usuń z oferty</button>
+                    <div class="d-flex justify-content-end gap-1 align-items-center">
+                      <a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=product&product_id={{product.id}}">Edytuj</a>
+                      <button type="button" class="btn btn-danger btn-sm" onclick="confirmDeleteProductFromOffer('{{offer.id}}', '{{product.product.id}}')">Usuń</button>
+                    </div>
                   </td>
                 </tr>
               {% endif %}
