@@ -10,9 +10,9 @@
           </a>
         </li>
         <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Strona główna</a></li>
-        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Ustawienia</a></li>
+        <li class="nav-item d-none d-md-block"><a href="{% url 'settings' %}" class="nav-link">Ustawienia</a></li>
         {% else %}
-        <li class="nav-item d-none d-md-block"><a href="{% url 'index' %}" class="nav-link">Strona główna</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Strona główna</a></li>
         <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Logowanie</a></li>
         <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Rejestracja</a></li>
         {% endif %}

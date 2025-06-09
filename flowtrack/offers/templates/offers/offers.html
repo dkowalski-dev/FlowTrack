@@ -1,6 +1,23 @@
 {% extends "main.html" %}
 {% block title %}Oferty{% endblock title %}
 {% block main %}
+<div class="app-content-header">
+  <!--begin::Container-->
+  <div class="container-fluid">
+    <!--begin::Row-->
+    <div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Lista ofert</h3></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'create-offer'%}">Dodaj ofertę</a></li>
+            <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'clients' 'all'%}">Lista klientów</a></li>
+          </ol>
+        </div>
+    </div>
+    <!--end::Row-->
+  </div>
+  <!--end::Container-->
+</div>
 <div class="app-content">
     <!--begin::Container-->
     <div class="container-fluid">
@@ -10,32 +27,75 @@
           <!-- /.card -->
           <div class="card mb-4">
             <div class="card-header">
-              <h3 class="card-title">Aktualne oferty</h3>
+              <div class="card-title col-6">
+                <form method="GET" action="{% url 'offers' %}" class="form-inline d-flex gap-2">
+                  <input class="form-control" type="text" name="search_query"
+                    value="{{search_query}}" placeholder="Znajdź ofertę" />
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-search"></i>
+                    </button>
+                    <a href="{% url 'offers' %}" class="btn btn-primary"><i class="bi bi-arrow-counterclockwise"></i></a>
+                </form>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
               <table class="table table-sm">
                 <thead>
                   <tr>
-                    <th>Data</th>
-                    <th>Klient</th>
-                    <th>Miasto</th>
-                    <th>Region</th>
-                    <th>Email</th>
-                    <th>Telefon</th>
-                    <th>Status</th>
+                    {% if settings.show_created %}
+                      <th>Data</th>
+                    {% endif %}
+                    {% if settings.show_client %}
+                      <th>Klient</th>
+                    {% endif %}
+                    {% if settings.show_description %}
+                      <th>Opis</th>
+                    {% endif %}
+                    {% if settings.show_client_address %}
+                      <th>Adres</th>
+                    {% endif %}
+                    {% if settings.show_client_region %}
+                      <th>Region</th>
+                    {% endif %}
+                    {% if settings.show_client_email %}
+                      <th>Email</th>
+                    {% endif %}
+                    {% if settings.show_client_phone %}
+                      <th>Telefon</th>
+                    {% endif %}
+                    {% if settings.show_status %}
+                      <th>Status</th>
+                    {% endif %}
                   </tr>
                 </thead>
                 <tbody>
                 {% for offer in offers %}
                 <tr class="align-middle" onclick="window.location='{% url 'offer' offer.id %}';" style="cursor: pointer;">
-                    <td>{{ offer.created }}</td>
-                    <td>{{ offer.client }}</td>
-                    <td>{{ offer.client.address}}</td>
-                    <td>{{ offer.client.region }}</td>
-                    <td>{{ offer.client.email}}</td>
-                    <td>{{ offer.client.phone}}</td>
-                    <td>{{ offer.status }}</td>
+                    {% if settings.show_created %}
+                      <td>{{ offer.created|date:"d-m-Y" }}</td>
+                    {% endif %}
+                    {% if settings.show_client %}
+                      <td>{{ offer.client }}</td>
+                    {% endif %}
+                    {% if settings.show_description %}
+                      <td>{{ offer.description }}</td>
+                    {% endif %}
+                    {% if settings.show_client_address %}
+                     <td>{{ offer.client.address}}</td>
+                    {% endif %}
+                    {% if settings.show_client_region %}
+                      <td>{% if offer.client.region == 'brak' %} - {% else %}{{ offer.client.get_region_display }}{% endif %}</td>
+                    {% endif %}
+                    {% if settings.show_client_email %}
+                      <td>{{ offer.client.email}}</td>
+                    {% endif %}
+                    {% if settings.show_client_phone %}
+                      <td>{{ offer.client.phone}}</td>
+                    {% endif %}
+                    {% if settings.show_status %}
+                      <td>{{ offer.status }}</td>
+                    {% endif %}
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -48,6 +108,33 @@
         <!-- /.col -->
       </div>
       <!--end::Row-->
+      <nav aria-label="Page navigation example">
+        {% if offers.has_next or offers.has_previous %}
+        <ul class="pagination justify-content-center">
+          {% if offers.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="{% url 'offers'%}?page={{offers.previous_page_number}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% endif %}
+          {% for page in page_range %}
+          {% if page == offers.number %}
+          <li class="page-item active"><a class="page-link" href="{% url 'offers'%}?page={{page}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}">{{ page }}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="{% url 'offers'%}?page={{page}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}">{{ page }}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if offers.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{% url 'offers'%}?page={{offers.next_page_number}}&search_query={{search_query}}{% for s in status %}&status={{ s }}{% endfor %}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </nav>
     </div>
     <!--end::Container-->
   </div>

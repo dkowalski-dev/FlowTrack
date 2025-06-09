@@ -27,7 +27,7 @@ class Client(models.Model):
     email = models.EmailField(blank=True, default="")
     phone = models.CharField(max_length=16, blank=True, default="")
     address = models.CharField(max_length=120, blank=True, default="")
-    region = models.CharField(max_length=4, choices=choices, default='Brak')
+    region = models.CharField(max_length=4, choices=choices, default='brak')
 
     class Meta:
         abstract = True

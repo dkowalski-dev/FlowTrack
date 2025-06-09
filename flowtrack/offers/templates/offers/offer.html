@@ -3,15 +3,50 @@
 {% block title %}Oferta{% endblock title %}
 
 {% block main %}
+<div class="app-content-header">
+  <!--begin::Container-->
+  <div class="container-fluid">
+    <!--begin::Row-->
+    <div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Zarządzaj ofertą</h3></div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-end">
+          <li class="breadcrumb-item"><a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=client">Zmień klienta</a></li>
+          <li class="breadcrumb-item"><button class="btn btn-danger btn-sm" onclick="confirmDelete('offer', '{{ offer.id }}')"> Usuń oferte</button></li>
+        </ol>
+      </div>
+    </div>
+    <!--end::Row-->
+  </div>
+  <!--end::Container-->
+</div>
 <div class="app-content">
   <div class="row">
     <!-- Pierwsza kolumna -->
     <div class="col-md-6">
-      <div class="card card-primary card-outline mb-4">
+      {% if offer_form %}
+      <div class="card card-outline mb-4">
+        <form method="POST">
+          {% csrf_token %}
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div class="card-title col-6"><strong>Edytuj opis</strong></div>
+          <div class="text-muted col-6 text-end">{{offer_form.status}}</div>
+        </div>
+        <div class="card-body">
+          <p class="muted">
+            {{offer_form.description}}
+          </p>
+          <button type="submit" class="btn btn-primary" name="description_form">Zatwierdź</button>
+          <a class="btn btn-danger" href="{% url 'offer' offer.id %}">Anuluj</a>
+        </div>
+        </form>
+      </div>
+      {% else %}
+      <div class="card card-outline mb-4">
         <!--begin::Header-->
         <div class="card-header d-flex justify-content-between align-items-center">
           <div class="card-title col-6"><strong>Opis oferty</strong></div>
-          <div class="text-muted col-6 text-end"><strong>Status: {{ offer.status }}</strong></div>
+          <div class="text-muted col-6 text-end"><strong>Status: {{ offer.status }}</strong> <a class="bi bi-pencil" href="{% url 'offer' offer.id %}?edit=description"></a></div>
         </div>
         <!--end::Header-->
         
@@ -23,6 +58,7 @@
         </div>
         <!--end::Body-->
       </div>
+      {% endif %}
       {% if notes %}
       <div class="card mb-4">
         <div class="card-header">
@@ -33,12 +69,34 @@
         <div class="card-body p-0">
           <table class="table table-sm">
             <tbody>
-            {% for note in notes %}
-              <tr class="align-middle">
-                <td>{{ note.content }}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('note', '{{ note.id }}')"> Usuń</button></td>
-                <td><a class="btn btn-primary btn-sm" href="#">Edytuj</a></td>
-              </tr>
+              {% for note in notes %}
+                <tr class="align-middle">
+                  {% if edit_note_form and note.id == edit_note_form.instance.id %}
+                    <form method="POST">
+                      {% csrf_token %}
+                      <td colspan="4">
+                        <div class="row g-2">
+                          <div class="col-9">
+                            {{ edit_note_form.content }}
+                          </div>
+                          <div class="col-3 d-flex align-items-center justify-content-end">
+                            <button type="submit" class="btn btn-primary btn-sm me-1" name="edit_note_form">Zatwierdź</button>
+                            <a class="btn btn-danger btn-sm" href="{% url 'offer' offer.id %}">Anuluj</a>
+                          </div>
+                        </div>
+                      </td>
+                    </form>
+                  {% else %}
+                    <td class="col-2">{{ note.created|date:"d-m H:i" }}</td>
+                    <td class="col-8 text-break">{{ note.content }}</td>
+                    <td class="col-1">
+                      <button class="btn btn-danger btn-sm" onclick="confirmDelete('note', '{{ note.id }}')">Usuń</button>
+                    </td>
+                    <td class="col-1">
+                      <a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=note&note_id={{note.id}}">Edytuj</a>
+                    </td>
+                  {% endif %}
+                </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -46,7 +104,7 @@
         <!-- /.card-body -->
       </div>
       {% endif %}
-      <div class="card card-primary card-outline mb-4">
+      <div class="card card-outline mb-4">
         <!--begin::Header-->
         <div class="card-header"><div class="card-title">Dodaj notatkę</div></div>
         <!--end::Header-->
@@ -55,7 +113,7 @@
             {% csrf_token %}
             <!--begin::Body-->
             <div class="card-body">
-                {% for field in form %}
+                {% for field in new_note_form %}
                 <div class="mb-3">
                     {{ field }}
                     {{ field.errors }}
@@ -63,7 +121,7 @@
                 {% endfor %}
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Zapisz</button>
+                <button type="submit" class="btn btn-primary" name="new_note_form">Zapisz</button>
             </div>
             <!--end::Footer-->
         </form>
@@ -73,10 +131,32 @@
     
     <!-- Druga kolumna -->
     <div class="col-md-6">
+      {% if client_form %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title"><strong>Lista klientów</strong></h3>
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+        <div class="card-body p-0">
+            <input type="hidden" name="status" value="{{ offer.status.id }}" />
+            {{client_form.client}}
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary" name="client_form">Zapisz</button>
+          <a class="btn btn-danger" href="{% url 'offer' offer.id %}">Anuluj</a>
+        </div>
+      </form>
+        <!-- /.card-body -->
+      </div>
+      {% else %}
       <div class="small-box text-bg-warning">
         <div class="inner">
           {% if offer.client_type.model == "companyclient" %}
-          <h2>Dane firmy</h2>
+          <div class="row">
+            <div class="col-6"><h2>Dane firmy</h2></div>
+            <div class="col-6 text-end"><a class="bi bi-pencil" href="{% url 'update-client' offer.client.id 'com' %}"></a></div>
+          </div>
           <div class="row">
             <div class="col-md-6">
               <p>Nazwa: {{ offer.client.company_name }}</p>
@@ -88,7 +168,10 @@
             </div>
           </div>
           {% elif offer.client_type.model == "individualclient" %}
-          <h2>Dane klienta</h2>
+          <div class="row">
+            <div class="col-6"><h2>Dane klienta</h2></div>
+            <div class="col-6 text-end"><a class="bi bi-pencil" href="{% url 'update-client' offer.client.id 'ind' %}"></a></div>
+          </div>
           <div class="row">
             <div class="col-md-6">
               <p>Imię: {{ offer.client.name }}</p>
@@ -105,12 +188,19 @@
               <p>Adres: {{ offer.client.address }}</p>
             </div>
             <div class="col-md-6">
-              <p>Region: {% if client.region == 'brak' %} - {% else %}{{ client.get_region_display }} {% endif %}</p>
+              <p>Region: {% if offer.client.region == 'brak' %} - {% else %}{{ offer.client.get_region_display }}{% endif %}</p>
             </div>
           </div>
+          {% if offer.client_type.model == "companyclient" %}
+          <div class="row">
+            <div class="col-md-6">
+              <p>Osoba do kontaktu: {{ offer.client.contact_person }}</p>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
-      
+      {% endif %}
       <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
           <div class="col-6"><h3 class="card-title"><strong>Produkty związane z ofertą</strong></h3></div>
@@ -122,21 +212,41 @@
           <table class="table table-sm">
             <thead>
               <tr>
-                <th>Numer/Kod produktu</th>
-                <th>Nazwa</th>
-                <th>Cena zakupu</th>
-                <th>Cena sprzedaży</th>
+                <th style="width: 45%">Nazwa</th>
+                <th style="width: 15%" class="text-end">Cena zakupu</th>
+                <th style="width: 15%" class="text-end">Cena dla oferty</th>
+                <th style="width: 10%" class="text-end">Ilość</th>
+                <th style="width: 15%"></th>
               </tr>
             </thead>
             <tbody>
-            {% for product in products %}
-              <tr class="align-middle">
-                <td>{{ product.serial_number }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.purchase_price }}</td>
-                <td>{{ product.sale_price }}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="confirmDeleteProductFromOffer('{{offer.id}}', '{{product.id}}')"> Usuń z oferty</button></td>
-              </tr>
+              {% for product in products %}
+              {% if product_form and product.id == product_form.instance.id %}
+                <form method="POST">
+                  {% csrf_token %}
+                  <tr class="align-middle">
+                    <td class="text-break">{{ product.product.name }}</td>
+                    <td class="text-end">{{ product.product.purchase_price }}</td>          
+                    <td class="text-end">{{ product_form.offer_price }}</td>
+                    <td class="text-end">{{ product_form.quantity }}</td>
+                    <td class="text-end">
+                      <button type="submit" class="btn btn-primary btn-sm me-1" name="product_form">Zatwierdź</button>
+                      <a class="btn btn-danger btn-sm" href="{% url 'offer' offer.id %}">Anuluj</a>
+                    </td>
+                  </tr>
+                  </form>
+              {% else %}
+                <tr class="align-middle">
+                  <td class="text-break">{{ product.product.name }}</td>
+                  <td class="text-end">{{ product.product.purchase_price }}</td>          
+                  <td class="text-end">{{ product.offer_price }}</td>
+                  <td class="text-end">{{ product.quantity }}</td>
+                  <td class="text-end">
+                    <a class="btn btn-primary btn-sm" href="{% url 'offer' offer.id %}?edit=product&product_id={{product.id}}">Edytuj</a>
+                    <button class="btn btn-danger btn-sm" onclick="confirmDeleteProductFromOffer('{{offer.id}}', '{{product.product.id}}')">Usuń z oferty</button>
+                  </td>
+                </tr>
+              {% endif %}
               {% endfor %}
             </tbody>
           </table>

@@ -1,26 +1,48 @@
 {% extends "main.html" %}
 {% block title %}FlowTrack{% endblock title %}
 {% block main %}
-<div class="d-flex justify-content-center">
-  <div class="col-md-6">
-      <div class="card card-primary card-outline mb-4">
-          <div class="card-header"><div class="card-title">{{title}}</div></div>
-          <form method="POST">
-              {% csrf_token %}
-              <div class="card-body">
-                  {% for field in form %}
-                  <div class="mb-3">
-                      {{ field.label }}
-                      {{ field }}
-                      {{ field.errors }}
-                  </div>
-                  {% endfor %}
-              </div>
-              <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Zatwierdź</button>
-              </div>
-          </form>
-      </div>
+
+   <div class="app-content-header">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <!--begin::Row-->
+        <div class="row">
+          <div class="col-sm-6"><h3 class="mb-0"></h3></div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
   </div>
-</div>
+  <!--end::App Content Header-->
+  <!--begin::App Content-->
+  <div class="app-content">
+    <!--begin::Container-->
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title"><strong>{{title}}</strong></h3>
+                      </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            {% for field in form %}
+                            <div class="mb-3">
+                                {{ field.label }}
+                                {{ field }}
+                                {{ field.errors }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Zatwierdź</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+          </div>
+    </div>
+    <!--end::Container-->
+  </div>
 {% endblock main %}

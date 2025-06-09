@@ -27,11 +27,32 @@ class Offer(models.Model):
     client_id = models.UUIDField(null=True)
     client = GenericForeignKey('client_type', 'client_id')
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True)
-    products = models.ManyToManyField(Product, blank=True)
+    products = models.ManyToManyField(Product, through="OfferProduct", blank=True)
     description = models.TextField(blank=True, default='')
 
+    @property
+    def display_client_name(self):
+        if hasattr(self.client, 'company_name'):
+            return self.client.company_name
+        elif hasattr(self.client, 'name') or hasattr(self.client, 'last_name'):
+            return f"{self.client.name} {self.client.last_name}"
+        else:
+            return "-"
+    
     class Meta:
         ordering = ['-created']
+
+class OfferProduct(models.Model):
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    offer_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["offer", "product"], name="unique_offer_group"
+            )
+        ]
 
 class Note(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
