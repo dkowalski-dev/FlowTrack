@@ -131,8 +131,6 @@ def offer(request, pk):
                     product_form.save()
                     return redirect('offer', offer.id)
             
-
-
     context = {
         "offer": offer,
         "new_note_form": new_note_form,
