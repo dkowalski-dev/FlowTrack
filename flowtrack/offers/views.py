@@ -3,13 +3,12 @@ from itertools import chain
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from offers.forms import NoteForm, OfferForm, ProductForm, StatusForm
+from offers.models import Note, Offer, OfferProduct, Status
 from products.models import Category, Product
 from usersapp.models import UserSettings
 
 from flowtrack.utils import paginObjects
-
-from .forms import NoteForm, OfferForm, ProductForm, StatusForm
-from .models import Note, Offer, OfferProduct, Status
 
 
 def offers(request):

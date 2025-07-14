@@ -6,9 +6,8 @@ from django.forms import (
     ModelForm,
     ModelMultipleChoiceField,
 )
+from offers.models import Note, Offer, OfferProduct, Status
 from products.models import Product
-
-from .models import Note, Offer, OfferProduct, Status
 
 
 class StatusForm(ModelForm):

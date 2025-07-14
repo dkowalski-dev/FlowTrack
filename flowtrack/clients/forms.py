@@ -1,7 +1,6 @@
+from clients.models import CompanyClient, IndividualClient
+from clients.utils import formatted_nip, formatted_phone
 from django.forms import ModelForm
-
-from .models import CompanyClient, IndividualClient
-from .utils import formatted_nip, formatted_phone
 
 
 class IndividualClientForm(ModelForm):

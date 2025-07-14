@@ -1,6 +1,5 @@
+from clients import views
 from django.urls import path
-
-from . import views
 
 urlpatterns = [
     path("browse/<str:client_type>/", views.clients, name="clients"),

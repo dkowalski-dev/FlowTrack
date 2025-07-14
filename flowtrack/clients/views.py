@@ -1,13 +1,12 @@
 from itertools import chain
 
+from clients.forms import CompanyClientForm, IndividualClientForm
+from clients.models import CompanyClient, IndividualClient
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from usersapp.models import UserSettings
 
 from flowtrack.utils import paginObjects
-
-from .forms import CompanyClientForm, IndividualClientForm
-from .models import CompanyClient, IndividualClient
 
 
 def clients(request, client_type):

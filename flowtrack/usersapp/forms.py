@@ -1,7 +1,6 @@
 from clients.utils import formatted_nip, formatted_phone
 from django.forms import ModelForm
-
-from .models import UserSettings
+from usersapp.models import UserSettings
 
 
 class UserInfoForm(ModelForm):

@@ -1,12 +1,11 @@
 from django.shortcuts import redirect, render
-
-from .forms import (
+from usersapp.forms import (
     UserInfoForm,
     UserPaginationForm,
     UserPreferencesForm,
     UserSortPreferences,
 )
-from .models import UserSettings
+from usersapp.models import UserSettings
 
 
 def settings(request):

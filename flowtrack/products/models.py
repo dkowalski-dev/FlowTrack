@@ -2,8 +2,7 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.db import models
-
-from .utils import formatted_price
+from products.utils import formatted_price
 
 
 class Category(models.Model):
