@@ -1,18 +1,19 @@
+from clients.models import CompanyClient, IndividualClient
+from clients.utils import formatted_nip, formatted_phone
 from django.forms import ModelForm
-from .models import IndividualClient, CompanyClient
-from .utils import formatted_phone, formatted_nip
+
 
 class IndividualClientForm(ModelForm):
     class Meta:
         model = IndividualClient
-        fields = ['name', 'last_name', 'email', 'phone', 'address', 'region' ]
+        fields = ["name", "last_name", "email", "phone", "address", "region"]
         labels = {
-            'name': 'Imię', 
-            'last_name': "Nazwisko", 
-            'email': "Email", 
-            'phone': "Telefon", 
-            'address': "Adres", 
-            'region': "Region",
+            "name": "Imię",
+            "last_name": "Nazwisko",
+            "email": "Email",
+            "phone": "Telefon",
+            "address": "Adres",
+            "region": "Region",
         }
 
     def __init__(self, *arg, **kwargs):
@@ -22,22 +23,30 @@ class IndividualClientForm(ModelForm):
             field.widget.attrs.update({"class": "form-control"})
 
     def clean_phone(self):
-        phone = self.cleaned_data['phone']
+        phone = self.cleaned_data["phone"]
         return formatted_phone(phone)
 
 
 class CompanyClientForm(ModelForm):
     class Meta:
         model = CompanyClient
-        fields = ['nip', 'company_name', 'contact_person', 'email', 'phone', 'address', 'region' ]
+        fields = [
+            "nip",
+            "company_name",
+            "contact_person",
+            "email",
+            "phone",
+            "address",
+            "region",
+        ]
         labels = {
-            'company_name': 'Nazwa firmy', 
-            'nip': "NIP", 
-            'contact_person': "Osoba do kontaktu",
-            'email': "Email", 
-            'phone': "Telefon", 
-            'address': "Adres", 
-            'region': "Region",
+            "company_name": "Nazwa firmy",
+            "nip": "NIP",
+            "contact_person": "Osoba do kontaktu",
+            "email": "Email",
+            "phone": "Telefon",
+            "address": "Adres",
+            "region": "Region",
         }
 
     def __init__(self, *arg, **kwargs):
@@ -47,9 +56,9 @@ class CompanyClientForm(ModelForm):
             field.widget.attrs.update({"class": "form-control"})
 
     def clean_phone(self):
-        phone = self.cleaned_data['phone']
+        phone = self.cleaned_data["phone"]
         return formatted_phone(phone)
-    
+
     def clean_nip(self):
-        nip = self.cleaned_data['nip']
+        nip = self.cleaned_data["nip"]
         return formatted_nip(nip)

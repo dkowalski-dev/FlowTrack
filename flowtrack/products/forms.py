@@ -1,15 +1,13 @@
-from django.forms import ModelForm
-from .models import Category, Product
 from django.core.exceptions import ValidationError
+from django.forms import ModelForm
+from products.models import Category, Product
+
 
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ['name', 'vat']
-        labels = {
-            'name': 'Nazwa',
-            'vat': 'Stawka VAT'
-        }
+        fields = ["name", "vat"]
+        labels = {"name": "Nazwa", "vat": "Stawka VAT"}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -17,25 +15,33 @@ class CategoryForm(ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs.update({"class": "form-control"})
 
+
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['serial_number', 'name', 'description', 'category', 'purchase_price', 'sale_price']
+        fields = [
+            "serial_number",
+            "name",
+            "description",
+            "category",
+            "purchase_price",
+            "sale_price",
+        ]
         labels = {
             "serial_number": "Numer/Kod produktu",
             "name": "Nazwa",
             "description": "Opis",
             "category": "Kategoria",
             "purchase_price": "Cena zakupu",
-            "sale_price": "Cena sprzedaży"
+            "sale_price": "Cena sprzedaży",
         }
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         self.user = user
         if user:
-            self.fields['category'].queryset = Category.objects.filter(owner=user)
+            self.fields["category"].queryset = Category.objects.filter(owner=user)
 
         for name, field in self.fields.items():
             field.widget.attrs.update({"class": "form-control"})
@@ -46,8 +52,8 @@ class ProductForm(ModelForm):
         if commit:
             product.save()
         return product
-    
+
     def clean_sale_price(self):
-        if self.cleaned_data['purchase_price'] > self.cleaned_data['sale_price']:
+        if self.cleaned_data["purchase_price"] > self.cleaned_data["sale_price"]:
             raise ValidationError("Cena sprzedaży nie może być niższa niż cena zakupu")
-        return self.cleaned_data['sale_price']
+        return self.cleaned_data["sale_price"]

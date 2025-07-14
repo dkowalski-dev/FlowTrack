@@ -1,68 +1,107 @@
-from django.shortcuts import render, redirect
-from .models import IndividualClient, CompanyClient
-from .forms import IndividualClientForm, CompanyClientForm
-from django.db.models import Q
-from flowtrack.utils import paginObjects
 from itertools import chain
+
+from clients.forms import CompanyClientForm, IndividualClientForm
+from clients.models import CompanyClient, IndividualClient
+from django.db.models import Q
+from django.shortcuts import redirect, render
 from usersapp.models import UserSettings
+
+from flowtrack.utils import paginObjects
+
 
 def clients(request, client_type):
     settings = UserSettings.objects.get_or_create(user=request.user)[0]
-    company_search_query = request.GET.get('company_search_query', '')
-    individual_search_query = request.GET.get('individual_search_query', '')
+    company_search_query = request.GET.get("company_search_query", "")
+    individual_search_query = request.GET.get("individual_search_query", "")
 
-    if client_type in ['all', 'com']:
+    if client_type in ["all", "com"]:
         company_client_list = CompanyClient.objects.filter(owner=request.user).filter(
-            Q(email__icontains=company_search_query) |
-            Q(phone__icontains=company_search_query) |
-            Q(address__icontains=company_search_query) |
-            Q(contact_person__icontains=company_search_query) |
-            Q(company_name__icontains=company_search_query) |
-            Q(nip__icontains=company_search_query)
+            Q(email__icontains=company_search_query)
+            | Q(phone__icontains=company_search_query)
+            | Q(address__icontains=company_search_query)
+            | Q(contact_person__icontains=company_search_query)
+            | Q(company_name__icontains=company_search_query)
+            | Q(nip__icontains=company_search_query)
         )
         company_region_client_list = CompanyClient.objects.filter(owner=request.user)
 
         company_region_client_list = [
-            client for client in company_region_client_list
-            if company_search_query.lower() in client.get_region_display().lower() 
+            client
+            for client in company_region_client_list
+            if company_search_query.lower() in client.get_region_display().lower()
         ]
-        company_client_list = list({client.id: client for client in chain(company_client_list, company_region_client_list)}.values())
-        company_client_list, company_page_range = paginObjects(request, company_client_list, settings.clients_paginator, page_key="company_page")
+        company_client_list = list(
+            {
+                client.id: client
+                for client in chain(company_client_list, company_region_client_list)
+            }.values()
+        )
+        company_client_list, company_page_range = paginObjects(
+            request,
+            company_client_list,
+            settings.clients_paginator,
+            page_key="company_page",
+        )
     else:
         company_client_list = []
         company_page_range = 0
-    
+
     sort_field = settings.company_client_sort
-    reverse = sort_field.startswith('-')
-    sort_key = sort_field.lstrip('-')
+    reverse = sort_field.startswith("-")
+    sort_key = sort_field.lstrip("-")
 
-    company_client_list = sorted(company_client_list, key=lambda client: getattr(client, sort_key), reverse=reverse)
+    company_client_list = sorted(
+        company_client_list,
+        key=lambda client: getattr(client, sort_key),
+        reverse=reverse,
+    )
 
-    if client_type in ['all', 'ind']:
-        individual_client_list = IndividualClient.objects.filter(owner=request.user).filter(
-            Q(email__icontains=individual_search_query) |
-            Q(phone__icontains=individual_search_query) |
-            Q(address__icontains=individual_search_query) |
-            Q(name__icontains=individual_search_query) |
-            Q(last_name__icontains=individual_search_query) 
+    if client_type in ["all", "ind"]:
+        individual_client_list = IndividualClient.objects.filter(
+            owner=request.user
+        ).filter(
+            Q(email__icontains=individual_search_query)
+            | Q(phone__icontains=individual_search_query)
+            | Q(address__icontains=individual_search_query)
+            | Q(name__icontains=individual_search_query)
+            | Q(last_name__icontains=individual_search_query)
         )
-        individual_region_client_list = IndividualClient.objects.filter(owner=request.user)
+        individual_region_client_list = IndividualClient.objects.filter(
+            owner=request.user
+        )
 
         individual_region_client_list = [
-            client for client in individual_region_client_list
-            if individual_search_query.lower() in client.get_region_display().lower() 
+            client
+            for client in individual_region_client_list
+            if individual_search_query.lower() in client.get_region_display().lower()
         ]
-        individual_client_list = list({client.id: client for client in chain(individual_client_list, individual_region_client_list)}.values())
-        individual_client_list, individual_page_range = paginObjects(request, individual_client_list, settings.clients_paginator, page_key="individual_page")
+        individual_client_list = list(
+            {
+                client.id: client
+                for client in chain(
+                    individual_client_list, individual_region_client_list
+                )
+            }.values()
+        )
+        individual_client_list, individual_page_range = paginObjects(
+            request,
+            individual_client_list,
+            settings.clients_paginator,
+            page_key="individual_page",
+        )
     else:
         individual_client_list = []
         individual_page_range = 0
 
     sort_field = settings.individual_client_sort
-    reverse = sort_field.startswith('-')
-    sort_key = sort_field.lstrip('-')
+    reverse = sort_field.startswith("-")
+    sort_key = sort_field.lstrip("-")
 
-    individual_client_list = sorted(individual_client_list, key=lambda client: getattr(client, sort_key), reverse=reverse)
+    individual_client_list = sorted(
+        individual_client_list,
+        key=lambda client: getattr(client, sort_key),
+        reverse=reverse,
+    )
 
     context = {
         "individual_client_list": individual_client_list,
@@ -71,9 +110,10 @@ def clients(request, client_type):
         "individual_search_query": individual_search_query,
         "client_type": client_type,
         "company_page_range": company_page_range,
-        "individual_page_range": individual_page_range
+        "individual_page_range": individual_page_range,
     }
     return render(request, "clients/clients.html", context)
+
 
 def create_client(request, client_type):
     if client_type == "ind":
@@ -82,7 +122,7 @@ def create_client(request, client_type):
         form = CompanyClientForm()
     else:
         return redirect("clients", client_type="all")
-    
+
     if request.method == "POST":
         if client_type == "ind":
             form = IndividualClientForm(request.POST)
@@ -95,12 +135,10 @@ def create_client(request, client_type):
             client.owner = request.user
             client.save()
             return redirect("clients", client_type="all")
-    
-    context = {
-        "form": form,
-        "title": "Dodaj klienta"
-    }
+
+    context = {"form": form, "title": "Dodaj klienta"}
     return render(request, "form_template.html", context)
+
 
 def update_client(request, pk, client_type):
     if client_type == "ind":
@@ -120,8 +158,5 @@ def update_client(request, pk, client_type):
             if form.is_valid():
                 form.save()
                 return redirect("clients", client_type="all")
-    context = { 
-        "form": form,
-         "title": "Edytuj dane" 
-         }
+    context = {"form": form, "title": "Edytuj dane"}
     return render(request, "form_template.html", context)
